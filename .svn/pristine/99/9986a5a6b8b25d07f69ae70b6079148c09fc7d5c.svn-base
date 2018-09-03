@@ -1,0 +1,355 @@
+<template>
+  <div class="wzds">
+    <div class="news">
+      <div class="news-top">
+        <h4>玩转蛋生</h4>
+        <!-- <span class="morenew"></span> -->
+      </div>
+      <ul class="newslist">
+        <li @click="changenews(0)"></li>
+        <li @click="changenews(1)"></li>
+      </ul>
+      <swiper :options="swiperOption1" ref="mySwiper" :not-next-tick="swiperOption1.notNextTick">
+        <swiper-slide>
+          <div class="news-content">
+            <ul class="newsitem">
+              <li @click="egginfo(0)">
+                <img src="../../common/img/officalwebimg/pic1/60.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(1)">
+                <img src="../../common/img/officalwebimg/pic1/59.png" alt="">
+                <p>小鸭蛋</p>
+              </li>
+              <li @click="egginfo(2)">
+                <img src="../../common/img/officalwebimg/pic1/58.png" alt="">
+                <p>小蛇蛋</p>
+              </li>
+              <li @click="egginfo(3)">
+                <img src="../../common/img/officalwebimg/pic1/57.png" alt="">
+                <p>乌龟蛋</p>
+              </li>
+              <li @click="egginfo(4)">
+                <img src="../../common/img/officalwebimg/pic1/56.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(5)">
+                <img src="../../common/img/officalwebimg/pic1/55.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(6)">
+                <img src="../../common/img/officalwebimg/pic1/64.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(7)">
+                <img src="../../common/img/officalwebimg/pic1/63.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(8)">
+                <img src="../../common/img/officalwebimg/pic1/62.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(9)">
+                <img src="../../common/img/officalwebimg/pic1/61.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <!-- <li @click="egginfo(10)">
+                <img src="../../common/img/officalwebimg/pic1/60.png" alt="">
+                <p>小鸡蛋</p>
+              </li> -->
+              <li @click="egginfo(10)">
+                <img src="../../common/img/officalwebimg/pic1/65.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(11)">
+                <img src="../../common/img/officalwebimg/pic1/66.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(12)">
+                <img src="../../common/img/officalwebimg/pic1/67.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(13)">
+                <!-- <img src="../../common/img/officalwebimg/pic1/68.png" alt="">
+                <p>小鸡蛋</p> -->
+              </li>
+            </ul>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="news-content">
+            <ul class="newsitem">
+              <!-- <li @click="egginfo(1)">
+                <img src="../../common/img/officalwebimg/pic1/60.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(2)">
+                <img src="../../common/img/officalwebimg/pic1/59.png" alt="">
+                <p>小鸭蛋</p>
+              </li>
+              <li @click="egginfo(3)">
+                <img src="../../common/img/officalwebimg/pic1/58.png" alt="">
+                <p>小蛇蛋</p>
+              </li>
+              <li @click="egginfo(4)">
+                <img src="../../common/img/officalwebimg/pic1/57.png" alt="">
+                <p>乌龟蛋</p>
+              </li>
+              <li @click="egginfo(5)">
+                <img src="../../common/img/officalwebimg/pic1/56.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(6)">
+                <img src="../../common/img/officalwebimg/pic1/55.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(7)">
+                <img src="../../common/img/officalwebimg/pic1/64.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(8)">
+                <img src="../../common/img/officalwebimg/pic1/63.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(9)">
+                <img src="../../common/img/officalwebimg/pic1/62.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(10)">
+                <img src="../../common/img/officalwebimg/pic1/61.png" alt="">
+                <p>小鸡蛋</p>
+              </li> -->
+              <li @click="egginfo(0)">
+                <img src="../../common/img/officalwebimg/pic1/60.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(1)">
+                <img src="../../common/img/officalwebimg/pic1/59.png" alt="">
+                <p>小鸭蛋</p>
+              </li>
+              <li @click="egginfo(2)">
+                <img src="../../common/img/officalwebimg/pic1/58.png" alt="">
+                <p>小蛇蛋</p>
+              </li>
+              <li @click="egginfo(3)">
+                <img src="../../common/img/officalwebimg/pic1/57.png" alt="">
+                <p>乌龟蛋</p>
+              </li>
+              <li @click="egginfo(4)">
+                <img src="../../common/img/officalwebimg/pic1/56.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(5)">
+                <img src="../../common/img/officalwebimg/pic1/55.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(6)">
+                <img src="../../common/img/officalwebimg/pic1/64.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+              <li @click="egginfo(7)">
+                <img src="../../common/img/officalwebimg/pic1/63.png" alt="">
+                <p>小鸡蛋</p>
+              </li>
+            </ul>
+          </div>
+        </swiper-slide>
+      </swiper>
+      <fadeAnimation>
+      <div class="eggbox" v-show="showeggbox">
+        <i class="close" @click="closeeggbox"></i>
+        <img :src="eggimg[index3]" alt="">
+        <div class="cwtip">
+          <p>真的就只是一个鸡蛋啊</p>
+          <p>孵化时间：30分钟</p>
+          <p>预计收获：小黄鸡1-1只  经验40</p>
+        </div>
+      </div>
+      </fadeAnimation>
+    </div>
+  </div>
+</template>
+
+<script>
+import { swiper, swiperSlide } from "vue-awesome-swiper";
+import "swiper/dist/css/swiper.css";
+import fadeAnimation from './fadeAnimation'
+export default {
+  data() {
+    let vm = this;
+    return {
+      index0: 0,
+      showeggbox : false,
+      eggimg:['http://123.206.24.154/static/53.png','http://123.206.24.154/static/54.png','http://123.206.24.154/static/55.png','http://123.206.24.154/static/56.png','http://123.206.24.154/static/57.png','http://123.206.24.154/static/58.png','http://123.206.24.154/static/59.png','http://123.206.24.154/static/60.png','http://123.206.24.154/static/61.png','http://123.206.24.154/static/62.png','http://123.206.24.154/static/63.png','http://123.206.24.154/static/64.png','http://123.206.24.154/static/65.png','http://123.206.24.154/static/67.png',],
+      index3:"",
+      swiperOption1: {
+        on: {
+          slideChangeTransitionStart() {
+            vm.index0 = this.activeIndex;
+          }
+        },
+        notNextTick: true
+      }
+    };
+  },
+  methods: {
+    egginfo (val) {
+      this.showeggbox = true;
+      // console.log(val);
+      this.index3 = val;
+    },
+    closeeggbox () {
+      this.showeggbox = false;
+    },
+    changenews(val) {
+      this.index0 = val;
+      console.log(val);
+      this.swiper.slideTo(val, 500, false);
+    }
+  },
+  components: {
+    swiper,
+    swiperSlide,
+    fadeAnimation
+  },
+  computed: {
+    swiper() {
+      return this.$refs.mySwiper.swiper;
+    }
+  }
+};
+</script>
+
+<style scoped lang="less">
+.news {
+   box-shadow: 0 0rem 0.2rem rgba(0, 0, 0, 0.2);
+  height: 7.02rem;
+  background: #fff;
+  border-radius: 0.2rem;
+  padding: 0.2rem;
+  box-sizing: border-box;
+  margin-top: 0.2rem;
+  overflow: hidden;
+  position: relative;
+  .eggbox {
+    position: absolute;
+     box-shadow: 0 0rem 0.3rem rgba(0, 0, 0, 0.4);
+    left: 50%;
+    top: 65%;
+    width: 5.4rem;
+    transform: translate(-50% , -50%);
+    height: 1.86rem;
+    background: #fff;
+    z-index: 9999999;
+    border-radius: 0.2rem;
+    img {
+      margin: 0.2rem;
+      width: 1.35rem;
+      height: 1.35rem;
+      float: left;
+    }
+    .cwtip {
+      margin-top: 0.4rem;
+      float: left;
+      p {
+        margin-bottom: 0;
+        font-size: 0.2rem;
+          color: #474747;
+        &:nth-of-type(1) {
+          font-size: 0.24rem;
+          color: #F1BC4D;
+        }
+      }
+    }
+    .close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 0.48rem;
+      height: 0.48rem;
+      background: url('../../common/img/officalwebimg/egg/close.png') no-repeat;
+      background-size: 100%;
+      z-index: 999;
+    }
+
+  }
+  .news-top {
+    overflow: hidden;
+    margin-bottom: 0.2rem;
+    h4 {
+      font-weight: bold;
+      color: #50CDEE;
+      float: left;
+      font-size: 0.3rem;
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 0.22rem;
+        height: 0.22rem;
+        background: url("../../common/img/officalwebimg/pic1/scl.png")
+          no-repeat;
+        background-size: 100%;
+        margin-right: 0.18rem;
+      }
+    }
+    .morenew {
+      float: right;
+      width: 0.36rem;
+      height: 0.08rem;
+      background: url("../../common/img/officalwebimg/pic1/morenew.png")
+        no-repeat;
+      background-size: 100%;
+      position: relative;
+      top: 0.2rem;
+    }
+  }
+  .newslist {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.2rem;
+    li {
+      font-size: 0.26rem;
+      // line-height: 0.4rem;
+      width: 2.7rem;
+      height: 0.86rem;
+      color: #7a7a7a;
+
+      &:nth-of-type(1) {
+        background: url('../../common/img/officalwebimg/pic1/cwd.png') no-repeat;
+        background-size: 100%;
+      }
+
+      &:nth-of-type(2) {
+        background: url('../../common/img/officalwebimg/pic1/dj.png') no-repeat;
+        background-size: 100%;
+      }
+    }
+  }
+  .news-content {
+    .newsitem {
+      // flex-wrap: wrap;
+      // display: flex;
+      // justify-content: space-between;
+      // align-items: center;
+      li {
+        float: left;
+        margin: 0.1rem;
+        margin-right: 0.15rem;
+        img{
+          width: 0.85rem;
+          height: 0.99rem;
+        }
+        p{
+          margin-bottom: 0;
+          text-align: center;
+          line-height: 0.35rem;
+          font-size: 0.18rem;
+          color: #474747;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}
+</style>

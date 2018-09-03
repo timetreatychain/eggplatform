@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<input type="" name="" id="number" value="" />
+		<button id="submit">确认</button>
+		<script type="text/javascript">
+			document.querySelector("#submit").click()
+			function check() {
+				var num = document.querySelector("#number");
+				var numArr = num.split("");
+				var role = "7－9－10－5－8－4－2－1－6－3－7－9－10－5－8－4－2".split("－");
+				var sum = 0;
+				for(var i = 0; i < numArr.length - 1; i++) {
+					sum += numArr[i] * role[i];
+				}
+				var lastNum = sum % 11;
+				var role2 = "1－0－X－9－8－7－6－5－4－3－2".split("－");
+				if(role2[lastNum] == numArr[numArr.length - 1]) {
+					return "真的";
+				} else {
+					return "假的";
+				}
+			}
+		</script>
+	</body>
+
+</html>

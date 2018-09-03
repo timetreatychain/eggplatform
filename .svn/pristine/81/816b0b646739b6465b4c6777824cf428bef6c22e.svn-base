@@ -1,0 +1,104 @@
+<template>
+  <div class="eggworld-header">
+      <h1 class="logo" v-if="show1"></h1>
+      <a href="javascript:history.go(-1)" class="back" v-if="!show1"></a>
+      <router-link tag="h2" to="/officialWeb" class="logo1" v-if="!show1"></router-link>
+      <span class="header-more" v-if="showmore" @click="changeShowMore"></span>
+      <span class="header-more close" v-else @click="changeShowMore"></span>
+    </div>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        showmore: true,
+        show1 : false,
+        header1: this.$route.path,
+      }
+    },
+    mounted () {
+      this.init();
+    },
+    watch : {
+      header1(val) {
+        let path1 = val.indexOf('publicWeb');
+        let path2 = val.indexOf('officialWeb');
+        if(path2 != -1) {
+          this.show1 = true;
+        } 
+      },
+    },
+    methods : {
+      init() {
+        let path1 = this.$route.path.indexOf('publicWeb');
+        let path2 = this.$route.path.indexOf('officialWeb');
+        if(path2 != -1) {
+          this.show1 = true;
+        } 
+      },
+      changeShowMore() {
+      this.showmore = !this.showmore;
+    },
+    }
+  }
+</script>
+
+<style scoped lang="less">
+  .eggworld-header {
+  position: sticky;
+  left:0;
+  top: 0;
+  height: 0.9rem;
+  padding: 0.1rem 0.2rem;
+  box-sizing: border-box;
+  z-index: 99999999999;
+  background: #fff;
+  // overflow: hidden;
+  .logo {
+    height: 0.74rem;
+    width: 1.15rem;
+    background: url("../../common/img/officalwebimg/pic1/logo.png") no-repeat;
+    background-size: 100%;
+    float: left;
+    margin: 0;
+  }
+  .logo1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 0.74rem;
+    width: 1.15rem;
+    background: url("../../common/img/officalwebimg/pic1/logo.png") no-repeat;
+    background-size: 100%;
+    margin: 0;
+  }
+  .back {
+    height: 0.43rem;
+    width: 0.53rem;
+    background: url("../../common/img/officalwebimg/pic1/back.png") no-repeat;
+    background-size: 100%;
+    float: left;
+    margin: 0;
+    position: relative;
+    top: 0.2rem;
+  }
+  .header-more {
+    float: right;
+    width: 0.48rem;
+    height: 0.4rem;
+    background: url("../../common/img/officalwebimg/pic1/more.png") no-repeat;
+    background-size: 100%;
+    margin-top: 0.2rem;
+  }
+  .close {
+    float: right;
+    width: 0.48rem;
+    height: 0.48rem;
+    margin-top: 0.25rem;
+    background: url("../../common/img/officalwebimg/pic1/close.png") no-repeat;
+    background-size: 100%;
+    margin-top: 0.12rem;
+  }
+}
+</style>

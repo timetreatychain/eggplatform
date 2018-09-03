@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>鲤鱼轻游戏平台接入文档</title>
+	</head>
+
+	<body>
+		<div class="content">
+			<div class="apiBox">
+				<p class="liyugame">鲤鱼轻游戏平台接入文档</p>
+				<p>
+					<a>当前版本: 1.2.2</a><br>
+				</p>
+				<p>
+					<a href="#1.1 接入须知">1.1接入须知</a><br>
+					<a href="#1.2 前端初始化"> 1.2前端初始化</a><br>
+					<a href="#1.3 用户信息获取">1.3获取用户信息</a><br>
+					<a href="#1.4 角色创建接口"> 1.4角色创建接口</a><br>
+					<a href="#1.5 充值唤起"> 1.5充值唤起</a><br>
+					<a href="#1.6充值回调"> 1.6充值回调</a><br>
+				</p>
+				<p>
+					<a href="#2附录"> 附录</a><br>
+				</p>
+				<h5><a name="1.1 接入须知"></a>1.1 接入须知<span class="red">(必读)</span></h5>
+				<br>1、平台提供：app_id(商户ID) ,secret_key(商户私钥), mch_id(商户标识)
+				<br>2、接入方提供：游戏Url; 支付完成回调地址 平台会以post形式反馈支付结果数据</p>
+
+				<h5><a name="1.2 前端初始化"></a>1.2前端初始化<span class="red">(必接)</span></h5>
+				<p>游戏加载时加载h5sdk.js文件，并做初始化 <span class="blue">&lt;</span><span class="blue">script src="http://www.liyugame.com/h5sdk/h5sdk.js" type="text/javascript&gt;"</span><span class="blue">&lt;</span><span class="blue">/script&gt;</span> <br>1、获取用户令牌：</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+                        <li class="L0"><code><span class="pln"></span><span class="str">获取用户 open_id</span><span class="pun">:</span><span class="lit">liyusdk.open_id</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">获取授权令牌access_token</span><span class="pun">:</span><span class="lit">liyusdk.access_token</span><span class="pun">,</span></code></li>
+                    </ol>
+                </pre>
+				<p>3、请求方式：<span class="red">在游戏加载时调用</span> 初始化sdk：liyusdk.init();</p>
+				<p>4、返回值 无</p>
+
+				<h5><a name="1.3用户信息获取"></a>1.3 用户信息获取<span class="red">(必接)</span></h5>
+				<p>1、请求地址：
+					<a href="http://www.liyugame.com/h5API/api/h5sdk/getUserInfo" target="_blank">http://www.liyugame.com/h5API/api/h5sdk/getUserInfo</a> <br>2、请求方式：post <br>3、请求参数：</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+                        <li class="L0"><code><span class="pln"></span><span class="str">open_id</span><span class="pun">:</span><span class="lit">用户open_id</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">access_token</span><span class="pun">:</span><span class="lit">用户登录口令</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">app_id</span><span class="pun">:</span><span class="lit">商户app_id</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">mch_id</span><span class="pun">:</span><span class="lit">商户ID</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">timestampStr</span><span class="pun">:</span><span class="lit">登录时间戳</span><span class="pun">,</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">sign</span><span class="pun">:</span><span class="lit">请求校验参数，aes(secret_key,mch_id+timestampStr)</span></code></li>
+                    </ol>
+                </pre>
+				<p>4、返回值</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+					  <li class="L3"><code><span class="pln"></span><span class="str">state</span><span class="pun">: {</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str2">code</span><span class="pun">:</span><span class="lit">错误编码</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str2">msg</span><span class="pun">:</span><span class="lit">提示信息</span><span class="pun">,</span></code></li>
+                         <li class="L7"><code><span class="pln"></span><span class="pun2">}</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">data</span><span class="pun">:</span><span class="lit">返回数据</span><span class="pun">,</span></code></li>
+                        <li class="L3"><code><span class="pln"></span><span class="pun">{</span></code></li>
+                        <li class="L4"><code><span class="pln"></span><span class="str2">nickName</span><span class="pun">:</span><span class="str">XXX, (昵称)</span><span class="pun">,</span></code></li>
+                        <li class="L6"><code><span class="pln"></span><span class="str2">headPath</span><span class="pun">:</span><span class="str">XXX, (头像)</span></code></li>
+                        <li class="L10"><code><span class="pln"></span><span class="pun">}</span></code></li>
+                    </ol>
+                </pre>
+				<p>5、请求示例</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+                        <li class="L0" style="list-style-type:none;"><code><span class="str">http://www.liyugame.com/h5API/api/h5sdk/getUserInfo?open_id=XXX&amp;access_token=XXX&amp;app_id=XXX&amp;mch_id=XXX&amp;timestampStr=XXX&amp;sign=XXX</span></code></li>
+                    </ol>
+                </pre>
+				<p>6、返回值示例</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+                        <li class="L0"><code><span class="pun">{</span></code></li>
+                        	
+                        <li class="L3"><code><span class="pln"></span><span class="str2">state</span><span class="pun">: {</span></code></li>
+                        	
+                        <li class="L1"><code><span class="pln"></span><span class="str2">code</span><span class="pun">:</span><span class="lit">20000</span><span class="pun">,</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str2">msg</span><span class="pun">:</span><span class="str">"操作成功"</span><span class="pun">,</span></code></li>
+                        <li class="L7"><code><span class="pln"></span><span class="pun2">}</span></code></li>
+                        
+                        
+                        <li class="L3"><code><span class="pln"></span><span class="str2">data</span><span class="pun">: {</span></code></li>
+                        <li class="L4"><code><span class="pln"></span><span class="str3">nickName</span><span class="pun">:</span><span class="str">XXX</span><span class="pun">,</span></code></li>
+                        <li class="L6"><code><span class="pln"></span><span class="str3">headPath</span><span class="pun">:</span><span class="str">X</span></code></li>
+                        <li class="L7"><code><span class="pln"></span><span class="pun2">}</span></code></li>
+                        <li class="L8"><code><span class="pun">}</span></code></li>
+                    </ol>
+                </pre>
+
+				<h5><a name="1.4 角色创建接口"></a>1.4 角色创建接口<span class="red">(必接)</span></h5>
+				<p>1、请求参数：</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+                        <li class="L0"><code><span class="pln"></span><span class="str">app_id</span><span class="pun">:</span><span class="lit">游戏app_id</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str">open_id</span><span class="pun">:</span><span class="lit">用户open_id</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str">access_token</span><span class="pun">:</span><span class="lit">用户登录口令</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str">mch_id</span><span class="pun">:</span><span class="lit">商户号mch_id</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">server_id</span><span class="pun">:</span><span class="lit">服务器id</span><span class="pun">,</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">server_name</span><span class="pun">:</span><span class="lit">服务器名称</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">role_id</span><span class="pun">:</span><span class="lit">角色id</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">role_name</span><span class="pun">:</span><span class="lit">角色昵称</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">timestampStr</span><span class="pun">:</span><span class="lit">角色昵称</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">sign</span><span class="pun">:</span><span class="lit">请求校验参数，aes(secret_key =xxx,mch_id=XXX+timestampStr=XXX)</span></code></li>
+                    </ol>
+                </pre>
+				<p>2、请求方式：</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+                        <li class="L0"><code><span class="pun">var roleData = {</span></code></li>
+                         <li class="L0"><code><span class="pln"></span><span class="str">app_id</span><span class="pun">:</span><span class="lit">游戏app_id</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str">open_id</span><span class="pun">:</span><span class="lit">用户open_id</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str">access_token</span><span class="pun">:</span><span class="lit">用户登录口令</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str">mch_id</span><span class="pun">:</span><span class="lit">商户号mch_id</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">server_id</span><span class="pun">:</span><span class="lit">服务器id</span><span class="pun">,</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">server_name</span><span class="pun">:</span><span class="lit">服务器名称</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">role_id</span><span class="pun">:</span><span class="lit">角色id</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">role_name</span><span class="pun">:</span><span class="lit">角色昵称</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">timestampStr</span><span class="pun">:</span><span class="lit">时间戳</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">sign</span><span class="pun">:</span><span class="lit">请求校验参数，aes(secret_key =xxx,mch_id=XXX+timestampStr=XXX)</span></code></li>
+                        <li class="L4"><code><span class="pun">};</span></code></li>
+                    </ol>
+                </pre>
+				<p>调用创建角色接口方法: liyusdk.createRole(roleData)</p>
+				<p>3、请求试例</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+                        <li class="L0"><code><span class="pun">&lt;</span><span>head&gt;</span></code></li>
+                        <li class="L0"><code><span class="pun">&lt;</span><span>script src="http://www.liyugame.com/h5sdk/h5sdk.js" type="text/javascript"&gt;</span><span>&lt;</span><span>/script&gt;</span></code></li>
+                        <li class="L0"><code><span class="pun">&lt;</span><span>script&gt;</span></code></li>
+                        <li class="L0"><code><span class="pun">liyusdk.init();</span></code></li>
+                        <li class="L0"><code><span class="pun">var roleData = {</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str">app_id</span><span class="pun">:</span><span class="lit">游戏app_id</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str">open_id</span><span class="pun">:</span><span class="lit">用户open_id</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str">access_token</span><span class="pun">:</span><span class="lit">用户登录口令</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str">mch_id</span><span class="pun">:</span><span class="lit">商户号mch_id</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">server_id</span><span class="pun">:</span><span class="lit">服务器id</span><span class="pun">,</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">server_name</span><span class="pun">:</span><span class="lit">服务器名称</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">role_id</span><span class="pun">:</span><span class="lit">角色id</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">role_name</span><span class="pun">:</span><span class="lit">角色昵称</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">timestampStr</span><span class="pun">:</span><span class="lit">角色昵称</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">content</span><span class="pun">:</span><span class="lit">角色昵称</span></code></li>
+                        <li class="L4"><code><span class="pun">};</span></code></li>
+                        <li class="L1"><code><span class="pln">liyusdk.createRole(roleData);</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span>&lt;</span><span>/script&gt;</span></code></li>
+                        <li class="L3"><code><span class="pln"></span><span>&lt;</span><span>/head&gt;</span></code></li>
+                    </ol>
+                </pre>
+				<p>4、返回值 无</p>
+				<h5><a name="1.5 充值唤起"></a>1.5 充值唤起<span class="red">(必接)</span></h5>
+				<p>1、请求参数：</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+                        <li class="L0"><code><span class="pln"></span><span class="str">app_id</span><span class="pun">:</span><span class="lit">游戏app_id</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">mch_id</span><span class="pun">:</span><span class="lit">商户标识</span><span class="pun">,</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">timestampStr</span><span class="pun">:</span><span class="lit">支付掉唤起时间戳</span><span class="pun">,</span></code></li>
+                        <li class="L3"><code><span class="pln"></span><span class="str">sign</span><span class="pun">:</span><span class="lit">请求校验参数，aes(secret_key =xxx,mch_id=XXX+timestampStr=XXX)</span><span class="pun">,</span></code></li>
+                        <li class="L4"><code><span class="pln"></span><span class="str">bill_no</span><span class="pun">:</span><span class="lit">订单号</span><span class="pun">,</span></code></li>
+                        <li class="L5"><code><span class="pln"></span><span class="str">goods_name</span><span class="pun">:</span><span class="lit">商品名称</span><span class="pun">,</span></code></li>
+                        <li class="L6"><code><span class="pln"></span><span class="str">total_fee</span><span class="pun">:</span><span class="lit">支付金额</span></code></li>
+                    </ol>
+                </pre>
+				<p>2、请求方式</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+                        <li class="L0"><code><span class="pln"></span><span class="str">引用js文件</span><span class="pun">:</span><span class="lit"><span>&lt;</span><span>script src="http://www.liyugame.com/h5sdk/h5sdk.js" type="text/javascript"</span><span class="lit">&gt;</span><span>&lt;</span><span>/</span><span>script</span><span class="lit">&gt;</span></span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">初始化sdk</span><span class="pun">:</span><span class="lit">liyusdk.init()</span><span class="pun">,</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">拼装参数</span></code></li>
+                        <li class="L3"><code><span class="pln"></span><span class="pun">var paydata = {</span></code></li>
+                        <li class="L4"><code><span class="pln"></span><span class="str2">"app_id"</span><span class="pun">:</span><span class="str">'111111111111111'</span><span class="pun">,</span></code></li>
+                        <li class="L5"><code><span class="pln"></span><span class="str2">"mch_id"</span><span class="pun">:</span><span class="str">'22222222'</span><span class="pun">,</span></code></li>
+                        <li class="L6"><code><span class="pln"></span><span class="str2">"timestampStr"</span><span class="pun">:</span><span class="str">'33333333333'</span><span class="pun">,</span></code></li>
+                        <li class="L7"><code><span class="pln"></span><span class="str2">"sign"</span><span class="pun">:</span><span class="str">'444444444'</span><span class="pun">,</span></code></li>
+                        <li class="L8"><code><span class="pln"></span><span class="str2">"bill_no"</span><span class="pun">:</span><span class="str">1223555</span><span class="pun">,</span></code></li>
+                        <li class="L9"><code><span class="pln"></span><span class="str2">"goods_name"</span><span class="pun">:</span><span class="str">'游戏大礼包'</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str2">"total_fee"</span><span class="pun">:</span><span class="str">'1111'</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="pun">}</span><span class="pun">,</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">调用支付方法</span><span class="pun">:</span><span class="lit">liyusdk.pay(paydata);</span></code></li>
+                    </ol>
+                </pre>
+				<p>示例代码</p>
+				<pre class="prettyprint">                    <ol class="linenums">
+                        <li class="L0"><code><span class="pln"></span><span class="str"><span>&lt;</span><span>!DOCTYPE html</span><span>&gt;</span></span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str"><span>&lt;</span><span>html lang="zh-cn"</span><span>&gt;</span></span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str"><span>&lt;</span><span>head</span><span>&gt;</span></span></code></li>
+                        <li class="L3"><code><span class="pln"></span><span class="str"><span>&lt;</span><span>script src="http://www.liyugame.com/h5sdk/h5sdk.js" type="text/javascript"</span><span>&gt;</span><span>&lt;</span><span>/</span><span>script</span><span>&gt;</span></span></code></li>
+                        <li class="L4"><code><span class="pln"></span><span class="str"><span>&lt;</span><span>script</span><span>&gt;</span></span></code></li>
+                        <li class="L5"><code><span class="pln"></span><span class="str">liyusdk.init();</span></code></li>
+                        <li class="L6"><code><span class="pln"></span><span class="str">var paydata = {</span></code></li>
+                       <li class="L4"><code><span class="pln"></span><span class="str2">"app_id"</span><span class="pun">:</span><span class="str">'111111111111111'</span><span class="pun">,</span></code></li>
+                        <li class="L5"><code><span class="pln"></span><span class="str2">"mch_id"</span><span class="pun">:</span><span class="str">'22222222'</span><span class="pun">,</span></code></li>
+                        <li class="L6"><code><span class="pln"></span><span class="str2">"timestampStr"</span><span class="pun">:</span><span class="str">'33333333333'</span><span class="pun">,</span></code></li>
+                        <li class="L7"><code><span class="pln"></span><span class="str2">"sign"</span><span class="pun">:</span><span class="str">'444444444'</span><span class="pun">,</span></code></li>
+                        <li class="L8"><code><span class="pln"></span><span class="str2">"bill_no"</span><span class="pun">:</span><span class="str">1223555</span><span class="pun">,</span></code></li>
+                        <li class="L9"><code><span class="pln"></span><span class="str2">"goods_name"</span><span class="pun">:</span><span class="str">'游戏大礼包'</span><span class="pun">,</span></code></li>
+                        <li class="L0"><code><span class="pln"></span><span class="str2">"total_fee"</span><span class="pun">:</span><span class="str">'1111'</span><span class="pun">,</span></code></li>
+                        <li class="L1"><code><span class="pln"></span><span class="str">};</span></code></li>
+                        <li class="L2"><code><span class="pln"></span><span class="str">liyusdk.pay( paydata, function (code, msg) {</span></code></li>
+                        <li class="L3"><code><span class="pln"></span><span class="str2">alert("支付 code="+code+",msg="+msg);</span></code></li>
+                        <li class="L4"><code><span class="pln"></span><span class="str">});</span></code></li>
+                        <li class="L5"><code><span class="pln"></span><span class="str"><span>&lt;</span><span>/</span><span>script</span><span>&gt;</span></span></code></li>
+                        <li class="L6"><code><span class="pln"></span><span class="str"><span>&lt;</span><span>/</span><span>head</span><span>&gt;</span></span></code></li>
+                        <li class="L7"><code><span class="pln"></span><span class="str"><span>&lt;</span><span>body</span><span>&gt;</span></span></code></li>
+                        <li class="L8"><code><span class="pln"></span><span class="str"><span>&lt;</span><span>/</span><span>body</span><span>&gt;</span></span></code></li>
+                        <li class="L9"><code><span class="pln"></span><span class="str"><span>&lt;</span><span>/</span><span>html</span><span>&gt;</span></span></code></li>
+                    </ol>
+                </pre>
+				<p>3、返回值</p>
+				<table>
+					<thead>
+						<tr>
+							<th width="20%">code</th>
+							<th width="80%">msg</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>20101</td>
+							<td>关闭支付</td>
+						</tr>
+						<tr>
+							<td>20102</td>
+							<td>支付成功</td>
+						</tr>
+						<tr>
+							<td>20103</td>
+							<td>支付失败</td>
+						</tr>
+						<tr>
+							<td>20104</td>
+							<td>取消支付</td>
+						</tr>
+						<tr>
+							<td>20105</td>
+							<td>支付参数错误</td>
+						</tr>
+						<tr>
+							<td>20106</td>
+							<td>支付参数数量错误</td>
+						</tr>
+					</tbody>
+				</table>
+				<h4>&nbsp;</h4>
+				
+				
+				<h5><a name="1.6充值回调"></a>1.6充值回调<span class="red">(必接)</span></h5>
+				<p>说明:充值成功后系统以post形式调用游戏方提供的接口地址</p>
+				<p>1.参数params(类型:String) </br></br>
+						<code>示例:"gameOrderNum="123456789"&productName="首充礼包"&totalAmount="88"&demandOrder="7654321"</code>
+					 	<li>1.gameOrderNum(游戏订单号) </li>
+					 	 <li>2.productName(购买产品名称) </li>
+					  	<li>3.totalAmount(充值金额)</li>
+					  	 <li>4.demandOrder(系统单号)</li>
+				</p>
+				
+
+				<h4><a name="2附录"></a> 附录</h4>
+				<h5><a name=" 平台参数列表说明"></a> 平台参数列表说明</h5>
+				<table>
+					<thead>
+						<tr>
+							<td>字段名</td>
+							<td>类型</td>
+							<td>说明</td>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr>
+							<td>app_id</td>
+							<td>String</td>
+							<td>游戏id</td>
+						</tr>
+						<tr>
+							<td>mch_id</td>
+							<td>String</td>
+							<td>商户标识</td>
+						</tr>
+						<tr>
+							<td>secret_key</td>
+							<td>String</td>
+							<td>商户私钥</td>
+						</tr>
+
+						<tr>
+							<td>open_id</td>
+							<td>String</td>
+							<td>用户id</td>
+						</tr>
+						<tr>
+							<td>access_token</td>
+							<td>String</td>
+							<td>用户登录口令</td>
+						</tr>
+						<tr>
+							<td>sign</td>
+							<td>String</td>
+							<td>签名,请求校验参数，aes(secret_key =xxx,mch_id=XXX+timestampStr=XXX)传参需要做encodeURIComponent处理</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+
+	<style type="text/css">
+		/* reset */
+		
+		html,
+		body,
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		div,
+		dl,
+		dt,
+		dd,
+		ul,
+		ol,
+		li,
+		p,
+		blockquote,
+		pre,
+		hr,
+		figure,
+		table,
+		caption,
+		th,
+		td,
+		form,
+		fieldset,
+		legend,
+		input,
+		button,
+		textarea,
+		menu {
+			margin: 0;
+			padding: 0;
+		}
+		
+		header,
+		footer,
+		section,
+		article,
+		aside,
+		nav,
+		hgroup,
+		address,
+		figure,
+		figcaption,
+		menu,
+		details {
+			display: block;
+		}
+		
+		table {
+			border-collapse: collapse;
+			border-spacing: 0;
+		}
+		
+		caption,
+		th {
+			text-align: left;
+			font-weight: normal;
+		}
+		
+		html,
+		body,
+		fieldset,
+		img,
+		iframe,
+		abbr {
+			border: 0;
+		}
+		
+		i,
+		cite,
+		em,
+		var,
+		address,
+		dfn {
+			font-style: normal;
+		}
+		
+		[hidefocus],
+		summary {
+			outline: 0;
+		}
+		
+		li {
+			list-style: none;
+		}
+		
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		small {
+			font-size: 100%;
+		}
+		
+		sup,
+		sub {
+			font-size: 83%;
+		}
+		
+		pre,
+		code,
+		kbd,
+		samp {
+			font-family: inherit;
+		}
+		
+		q:before,
+		q:after {
+			content: none;
+		}
+		
+		textarea {
+			overflow: auto;
+			resize: none;
+		}
+		
+		label,
+		summary {
+			cursor: default;
+		}
+		
+		a,
+		button {
+			cursor: pointer;
+		}
+		
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		em,
+		strong,
+		b {
+			font-weight: bold;
+		}
+		
+		del,
+		ins,
+		u,
+		s,
+		a,
+		a:hover {
+			text-decoration: none;
+		}
+		
+		body,
+		textarea,
+		input,
+		button,
+		select,
+		keygen,
+		legend {
+			font: 12px/1.14 arial, \5b8b\4f53;
+			color: #333;
+			outline: 0;
+		}
+		
+		a {
+			color: #000;
+			text-decoration: none;
+			cursor: pointer
+		}
+		
+		a:hover {
+			color: #4691CC;
+			text-decoration: underline
+		}
+		
+		.clearfix:after {
+			content: "\0020";
+			visibility: hidden;
+			display: block;
+			font-size: 0;
+			clear: both;
+			height: 0
+		}
+		
+		.clearfix {
+			*zoom: 1
+		}
+		
+		body {
+			min-width: 1000px;
+			background: #f0f0f0;
+			font: 12px/1.5 "Microsoft Yahei", "Arial";
+			color: #888;
+			-webkit-text-size-adjust: none;
+		}
+		
+		.general {
+			width: 1000px;
+			margin: 0 auto;
+		}
+		
+		@font-face {
+			font-family: "iconfont";
+			src: url('../font/iconfont.eot');
+			src: url('../font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+			url('../font/iconfont.woff') format('woff'), /* chromeï¿½ï¿½firefox */
+			url('../font/iconfont.ttf') format('truetype'), /* chromeï¿½ï¿½firefoxï¿½ï¿½operaï¿½ï¿½Safari, Android, iOS 4.2+*/
+			url('../font/iconfont.svg#iconfont') format('svg');
+			/* IE9*/
+			/* iOS 4.1- */
+		}
+		
+		.reg-red {
+			color: #ff3b3a;
+			font-size: 12px;
+		}
+		
+		.iconfont {
+			font-family: "iconfont" !important;
+			font-size: 16px;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-webkit-text-stroke-width: 0.2px;
+			-moz-osx-font-smoothing: grayscale;
+		}
+		
+		.icon-user:before {
+			content: "\e601";
+		}
+		
+		.icon-download:before {
+			content: "\e60c";
+		}
+		
+		.icon-info:before {
+			content: "\e60d";
+		}
+		
+		.icon-password:before {
+			content: "\e602";
+		}
+		
+		.icon-dot:before {
+			content: "\e603";
+		}
+		
+		.icon-daochushezhi:before {
+			content: "\e60f";
+		}
+		
+		.icon-i:before {
+			content: "\e604";
+		}
+		
+		.icon-iconfontguanbi:before {
+			content: "\e60e";
+		}
+		
+		.icon-zhexiantu:before {
+			content: "\e605";
+		}
+		
+		.icon-gongwenbao:before {
+			content: "\e606";
+		}
+		
+		.icon-tianping:before {
+			content: "\e607";
+		}
+		
+		.icon-bingtu:before {
+			content: "\e608";
+		}
+		
+		.icon-analysis:before {
+			content: "\e609";
+		}
+		
+		.icon-DMP:before {
+			content: "\e60a";
+		}
+		
+		.icon-brand:before {
+			content: "\e60b";
+		}
+		
+		.icon-tv:before {
+			content: "\e600";
+		}
+		/*å¤´éƒ¨*/
+		
+		.indexbg {
+			background: #fff
+		}
+		
+		.header {
+			width: 100%;
+			height: 92px;
+			background: #fff;
+			border-bottom: 1px solid #dfdfdf;
+			overflow: hidden;
+		}
+		
+		.logo {
+			width: 230px;
+			float: left;
+			margin: 10px 0 0 0;
+		}
+		
+		.nav {
+			width: 750px;
+			float: right;
+			margin-top: 10px
+		}
+		
+		.nav .menu {
+			float: left;
+		}
+		
+		.nav .menu a {
+			float: left;
+			font-size: 18px;
+			line-height: 70px;
+			margin: 0 18px;
+		}
+		
+		.nav .menu a.current {
+			border-bottom: 2px solid #009adb;
+			color: #009adb
+		}
+		
+		.nav .denglu {
+			float: right;
+			margin-top: 25px;
+			color: #999;
+			font-size: 14px;
+			line-height: 20px;
+		}
+		
+		.nav .denglu a {
+			color: #4c4c4c;
+			font-size: 14px;
+			margin: 0 10px
+		}
+		
+		.nav .denglu em {
+			font-size: 12px;
+			margin-left: 10px;
+			font-family: å®‹ä½“;
+		}
+		
+		.nav .denglu a:hover,
+		.nav .menu a:hover {
+			color: #009adb;
+			text-decoration: none;
+		}
+		
+		.nav .denglu a.register {
+			background: #007aff;
+			color: #fff;
+			padding: 2px 8px;
+			border-radius: 5px;
+		}
+		
+		.nav .denglu a:hover.register {
+			color: #fff;
+		}
+		/*banner*/
+		
+		.banner {
+			width: 100%;
+			float: left;
+			position: relative;
+		}
+		
+		.banner .big_pic {
+			height: 450px;
+		}
+		
+		.banner .big_pic li {
+			zoom: 1;
+			vertical-align: middle;
+			position: relative;
+			height: 450px;
+		}
+		
+		.banner .big_pic li a {
+			display: block;
+			width: 100%;
+			float: left;
+			height: 450px;
+		}
+		
+		.banner_force {
+			position: absolute;
+			bottom: 20px;
+			left: 50%;
+			margin-left: -20px;
+		}
+		
+		.banner_force li {
+			width: 12px;
+			height: 12px;
+			float: left;
+			cursor: pointer;
+			background: url(../images/fouce_ico2.png) no-repeat center;
+			margin-left: 10px;
+		}
+		
+		.banner_force li.on {
+			background: url(../images/fouce_ico1.png) no-repeat center
+		}
+		
+		.banner_bt {
+			width: 40px;
+			height: 69px;
+			position: absolute;
+			top: 185px;
+			z-index: 999;
+			cursor: pointer
+		}
+		
+		.banner_left {
+			background: url(../images/left_bt.png) no-repeat;
+			left: 50%;
+			margin-left: -562px;
+		}
+		
+		.banner_right {
+			background: url(../images/right_bt.png) no-repeat;
+			right: 50%;
+			margin-right: -562px;
+		}
+		
+		.banner_left:hover {
+			background: url(../images/left_bt_sel.png) no-repeat;
+		}
+		
+		.banner_right:hover {
+			background: url(../images/right_bt_sel.png) no-repeat;
+		}
+		/*textRoll*/
+		
+		.textRoll {
+			margin: 10px auto;
+			width: 90%;
+			height: auto;
+			overflow: hidden;
+			white-space: nowrap;
+			color: #000;
+		}
+		
+		.roll2 {
+			width: auto;
+			height: auto;
+			font-size: 12px;
+			margin: 0 10px;
+			float: left;
+			overflow: hidden;
+		}
+		
+		.roll2 p {
+			margin: 10px;
+			display: inline-block;
+		}
+		
+		.roll2 p span {
+			color: #f00;
+			margin: 0 2px;
+		}
+		
+		.bxfs {
+			padding: 50px 0;
+			width: 100%;
+			text-align: center;
+			margin: 0 auto;
+			color: #000;
+			position: relative;
+			background: #fff;
+			overflow: hidden;
+		}
+		
+		.indexCor {
+			background: #f7f7f7;
+		}
+		
+		.bxfs h1 {
+			font-size: 48px;
+			font-weight: 100;
+			margin: 0px 0 20px 0;
+		}
+		
+		.bxfs p {
+			font-size: 22px;
+			margin: 0 0 30px 0;
+		}
+		
+		.bxfs a {
+			border-radius: 5px;
+			font-size: 18px;
+			background: #007aff;
+			color: #fff;
+			width: 200px;
+			height: 55px;
+			line-height: 55px;
+			display: block;
+			text-decoration: none;
+			font-family: "Microsoft Yahei", "Arial";
+		}
+		
+		.bxfs a.btn1 {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin: 0px 0 0 -100px;
+		}
+		
+		.bxfs a.btn2 {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin: -150px 0 0 -190px;
+		}
+		
+		.bxfs a.btn3 {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin: 120px 0 0 130px;
+		}
+		
+		.bxfs .txt {
+			font-size: 16px;
+			color: #999;
+			text-align: center;
+			line-height: 100px;
+		}
+		
+		.gamelist {
+			padding: 50px 0;
+			text-align: center;
+			color: #000;
+		}
+		
+		.gamelist h1 {
+			font-size: 48px;
+			font-weight: 100;
+			margin: 0px 0 20px 0;
+		}
+		
+		.gamelist .gameicon {
+			margin-top: 30px;
+		}
+		
+		.gamelist .gameicon a {
+			display: inline-block;
+			text-align: center;
+			font-size: 16px;
+			margin: 0 10px;
+		}
+		
+		.gamelist .gameicon a img {
+			width: 100px;
+			height: 100px;
+		}
+		
+		.gamelist .gameicon a p {
+			width: 100px;
+			height: 30px;
+			display: block;
+			margin-top: 10px;
+			text-align: center;
+			margin: 0 auto;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		
+		.index_reg {
+			padding: 50px 0;
+			text-align: center;
+			color: #000;
+			position: relative;
+			background: #fff;
+		}
+		
+		.index_reg h1 {
+			font-size: 48px;
+			font-weight: 100;
+			margin: 0px 0 10px 0;
+		}
+		
+		.index_reg p {
+			font-size: 14px;
+			margin: 0 0 20px 0;
+			color: #f00;
+		}
+		
+		.index_reg .reg_info {
+			width: 1000px;
+			margin: 0 auto;
+		}
+		
+		.index_reg .reg_info li {
+			width: 400px;
+			display: inline-block;
+			font-size: 16px;
+			margin: 18px 0;
+		}
+		
+		.index_reg .reg_info li label {
+			width: 80px;
+			text-align: right;
+			color: #282828;
+			margin-right: 16px;
+			display: inline-block;
+		}
+		
+		.index_reg .reg_info li label span {
+			color: #f00;
+		}
+		
+		.index_reg .reg_info li input {
+			width: 280px;
+			height: 46px;
+			font-size: 16px;
+			text-indent: 0.6em;
+			color: #333;
+			border: 1px solid #bfbfbf;
+		}
+		
+		.index_reg button {
+			width: 400px;
+			height: 54px;
+			border: none;
+			background: #007aff;
+			border-radius: 5px;
+			margin: 15px 0;
+			font-size: 18px;
+			color: #fff;
+			font-family: "Microsoft Yahei", "Arial";
+		}
+		
+		.gn_list {
+			width: 100%;
+			float: left;
+		}
+		
+		.gn_list li {
+			width: 33.3%;
+			float: left;
+			text-align: center;
+			margin: 60px auto 0 auto;
+			display: block;
+			padding-bottom: 60px
+		}
+		
+		.gn_list li p {
+			color: #000101;
+			font-size: 20px;
+			line-height: 30px;
+			margin-top: 20px;
+		}
+		
+		.join_bg {
+			width: 100%;
+			float: left;
+			background: #f0f0f0;
+			padding-bottom: 40px;
+		}
+		
+		.join_tit {
+			width: 100%;
+			float: left;
+			text-align: center;
+			font-size: 40px;
+			margin-top: 45px;
+			color: #333;
+		}
+		
+		.join_list {
+			width: 100%;
+			float: left;
+		}
+		
+		.join_list li {
+			width: 33.3%;
+			float: left;
+			text-align: center;
+			margin: 60px auto 0 auto;
+			display: block;
+			padding-bottom: 30px
+		}
+		
+		.join_list li p {
+			color: #000101;
+			font-size: 20px;
+			line-height: 30px;
+			margin-top: 20px;
+		}
+		
+		.zy_game {
+			width: 100%;
+			float: left;
+			padding-bottom: 50px
+		}
+		
+		.zy_game li {
+			width: 20%;
+			float: left;
+			text-align: center;
+			margin: 40px auto 0 auto;
+			display: block;
+		}
+		
+		.zy_game li a {
+			width: 100%;
+			float: left;
+			font-size: 20px;
+			color: #999;
+		}
+		
+		.zy_game li a img {
+			width: 150px;
+			hegiht: 150px;
+			border-radius: 26px;
+		}
+		
+		.zy_game li a p {
+			width: 150px;
+			height: 30px;
+			display: block;
+			margin-top: 10px;
+			text-align: center;
+			margin: 0 auto;
+			overflow: hidden;
+		}
+		
+		.zy_game li a:hover {
+			color: #009adb;
+			text-decoration: none;
+		}
+		
+		.pattern-box {
+			width: 100%;
+			background: #fff;
+			overflow: hidden;
+		}
+		
+		.platform {
+			float: left;
+			width: 100%;
+			height: 500px;
+			background: url(../images/patternBg.jpg) no-repeat center top;
+		}
+		
+		.platform p {
+			text-align: center;
+			color: #fff;
+			font-size: 16px;
+		}
+		
+		.platform .p1 {
+			font-size: 60px;
+			margin: 130px 0 20px 0;
+		}
+		
+		.platform .p2 {
+			font-size: 30px;
+			margin: 0 0 30px 0;
+		}
+		
+		.platform .p3 {
+			line-height: 30px;
+		}
+		
+		.platform p span {
+			color: #FF724B;
+			margin: 0 10px;
+		}
+		
+		.patternBg {
+			background: #fff;
+			padding: 40px 0;
+		}
+		
+		.patternBg2 {
+			background: #EFEFEF;
+			padding: 40px 0;
+		}
+		
+		.patternLeft {
+			width: 100%;
+			overflow: hidden;
+		}
+		
+		.patternLeft img {
+			float: left;
+			display: block;
+		}
+		
+		.patternLeft .txt {
+			float: right;
+			margin: 120px 0 0 0;
+			color: #000;
+			text-align: right;
+		}
+		
+		.patternLeft .txt h2 {
+			font-size: 40px;
+			font-weight: 400;
+			line-height: 100px;
+		}
+		
+		.patternLeft .txt p {
+			font-size: 24px;
+			line-height: 36px;
+			color: #666;
+		}
+		
+		.patternLeft .marTop {
+			margin-top: 70px;
+		}
+		
+		.patternRight {
+			width: 100%;
+			overflow: hidden;
+		}
+		
+		.patternRight img {
+			float: right;
+			display: block;
+		}
+		
+		.patternRight .txt {
+			float: left;
+			margin: 100px 0 0 0;
+			color: #000;
+			text-align: left;
+		}
+		
+		.patternRight .txt h2 {
+			font-size: 40px;
+			font-weight: 400;
+			line-height: 100px;
+		}
+		
+		.patternRight .txt p {
+			font-size: 24px;
+			line-height: 36px;
+			color: #666;
+		}
+		
+		.contactBg {
+			width: 100%;
+			height: 200px;
+			background: url(../images/contactBg.jpg) no-repeat center top;
+			overflow: hidden;
+		}
+		
+		.contactBox {
+			margin: 30px 0;
+			background: #fff;
+			overflow: hidden;
+		}
+		
+		.contactBox .introduce {
+			margin: 40px 50px;
+			padding-bottom: 40px;
+			border-bottom: 1px solid #f0f0f0;
+			overflow: hidden;
+		}
+		
+		.contactBox .introduce p {
+			font-size: 15px;
+			text-indent: 2em;
+			margin: 10px 0;
+			line-height: 24px;
+		}
+		
+		.contactBox .contactInfo {
+			margin: 0 50px 40px 50px;
+		}
+		
+		.contactBox .contactInfo dl {}
+		
+		.contactBox .contactInfo dt {
+			font-size: 18px;
+			color: #000;
+			line-height: 50px;
+		}
+		
+		.contactBox .contactInfo dd {
+			font-size: 14px;
+			line-height: 30px;
+		}
+		
+		.box-login-container {
+			position: fixed;
+			top: 270px;
+			right: 0;
+			left: 0;
+			z-index: 10;
+			margin: 0 auto;
+			width: 485px;
+			height: 260px;
+			background: #fff;
+			border: 1px solid #eee;
+		}
+		
+		.box-login-container .box-login-tip {
+			height: 42px;
+			background: #1ca1fb;
+			color: #fff;
+			text-align: center;
+			font-size: 18px;
+			line-height: 42px;
+		}
+		
+		.box-login-container .box-login-tip .close {
+			float: right;
+			margin-right: 20px;
+			color: #fff;
+		}
+		
+		.box-login-container .box-login-main {
+			margin: 29px auto 29px auto;
+			width: 400px;
+			height: 160px;
+		}
+		
+		.box-login-container .box-login-main input {
+			padding-left: 10px;
+			width: 250px;
+			height: 34px;
+		}
+		
+		.box-login-container .box-login-main .box-login-email,
+		.box-login-password {
+			margin: 10px;
+		}
+		
+		.box-login-container .box-login-main .box-login-login {
+			display: block;
+			margin-top: 10px;
+			width: 170px;
+			outline: 0;
+			border: none;
+			background: #1ca1fb;
+			color: #fff;
+		}
+		
+		.box-login-container .box-login-main .box-login-reg {
+			float: right;
+			display: block;
+			margin-top: 10px;
+			width: 170px;
+			border: 1px #aaa solid;
+			background: #fff;
+			color: #000;
+			text-align: center;
+			line-height: 32px;
+		}
+		
+		.box-login-cover {
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 9;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, .5);
+		}
+		
+		.box-main-content-reg {
+			width: 100%;
+			padding-top: 30px;
+			padding-bottom: 30px;
+			overflow: hidden;
+		}
+		
+		.box-main-content-reg .wrapper {
+			background: #fff;
+			padding: 50px 0;
+		}
+		
+		.box-main-content-reg .wrapper .main {
+			margin: 0 auto;
+			padding-top: 40px;
+			padding-bottom: 40px;
+			width: 1000px;
+			min-height: 600px;
+		}
+		
+		.box-main-content-reg .wrapper .main .step {
+			margin: 0 auto;
+			text-align: center;
+			color: #aaa;
+		}
+		
+		.box-main-content-reg .wrapper .main .step img {
+			margin-right: 10px;
+			vertical-align: middle;
+		}
+		
+		.box-main-content-reg .wrapper .main .step .reg-line {
+			margin-left: 8px;
+		}
+		
+		.box-main-content-reg .wrapper .main .step .account-info,
+		.more-inf,
+		.verify-email {
+			color: #00a1f7;
+		}
+		
+		.expertBody {
+			width: 1000px;
+			margin: 40px auto 40px auto;
+			border: 1px solid #D9DADC;
+			background: #fff;
+			overflow: hidden;
+		}
+		
+		.expertBody:after {
+			content: ".";
+			display: block;
+			height: 0;
+			clear: both;
+			visibility: hidden;
+		}
+		
+		.left_menu {
+			width: 208px;
+			max-width: 208px;
+			float: left;
+			background: #fff;
+			padding-bottom: 0px;
+		}
+		
+		.left_menu li {
+			width: 100%;
+			float: left;
+			border-bottom: 1px solid #E8E8E8
+		}
+		
+		.menu_box {
+			padding: 6px 0;
+			border-top: 1px solid #e7e7eb;
+		}
+		
+		.menu_box.no_extra {
+			border-top-width: 0;
+			margin-top: 13px
+		}
+		
+		.menu_title {
+			position: relative;
+			overflow: hidden;
+			padding: 0 30px 0;
+			font-size: 16px;
+			width: auto;
+			color: #b2b2b2;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			word-wrap: normal;
+			line-height: 40px;
+		}
+		
+		.menu_title .new {
+			margin-left: 3px;
+		}
+		
+		.menu_title a {
+			display: block;
+			padding: 0 30px 0;
+			color: #222;
+			font-size: 14px;
+			text-decoration: none;
+		}
+		
+		.menu_title a:hover {
+			text-decoration: none;
+		}
+		
+		.menu_item {
+			line-height: 34px;
+		}
+		
+		.menu_item a {
+			display: block;
+			overflow: hidden;
+			padding: 2px 0 2px 58px;
+			width: auto;
+			color: #222;
+			font-size: 14px;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			word-wrap: normal;
+		}
+		
+		.menu_item a:hover {
+			text-decoration: none;
+		}
+		
+		.menu_item:hover {
+			background-color: #f4f5f9;
+		}
+		
+		.menu_box .current {
+			background-color: #009adb;
+			color: #fff;
+		}
+		
+		.menu_box .current a {
+			color: #fff;
+		}
+		/* æŽ¥å…¥æŒ‡å— */
+		
+		.inside_right {
+			width: 748px;
+			float: left;
+			background: #fff;
+			min-height: 710px;
+			border-left: 1px solid #e7e7e7;
+			padding: 10px 20px;
+		}
+		
+		.inside_right .right_top {
+			border-bottom: 1px solid #ededed;
+			color: #333;
+			line-height: 80px;
+		}
+		
+		.inside_right .right_top .right_title {
+			color: #000;
+			float: left;
+			font-size: 26px;
+		}
+		
+		.inside_right .right_top .website {
+			float: right;
+			color: #666;
+			font-size: 14px;
+		}
+		
+		.inside_right .right_top .website a {
+			color: #666;
+			margin: 0px 5px;
+			padding: 0px;
+		}
+		
+		.inside_right .content {
+			line-height: 24px;
+			margin: 50px 10px;
+			padding: 0px;
+		}
+		
+		.inside_right .content .xuhao h1 {
+			font-size: 24px;
+			font-weight: 300;
+			color: #333;
+			display: inline-block;
+		}
+		
+		.inside_right .content .xuhao span {
+			width: 40px;
+			height: 40px;
+			line-height: 40px;
+			display: inline-block;
+			margin-right: 10px;
+			border-radius: 100px;
+			background: #009adb;
+			color: #fff;
+			text-align: center;
+			font-size: 24px;
+		}
+		
+		.inside_right .content .txt {
+			margin: 25px 0 25px 50px;
+			font-size: 14px;
+		}
+		
+		.inside_right .content .txt a {
+			color: #009adb;
+			text-decoration: underline;
+		}
+		
+		.inside_right .content .txt .red {
+			color: #f00;
+		}
+		
+		.inside_right .content .txt p {
+			margin: 5px 0;
+		}
+		
+		.inside_right .content .txt h2 {
+			font-size: 16px;
+			background: #009adb;
+			display: table;
+			padding: 5px 15px;
+			color: #fff;
+			border-radius: 100px;
+			margin: 10px 0;
+		}
+		
+		.inside_right .content .faq {}
+		
+		.inside_right .content .faq .faqTit {
+			background: #009adb;
+			color: #fff;
+			display: table;
+			font-size: 18px;
+			padding: 5px 15px;
+			border-radius: 100px;
+		}
+		
+		.inside_right .content .faq .faqCont {
+			font-size: 14px;
+			margin: 20px 0;
+		}
+		
+		.inside_right .content .faq .faqCont .red {
+			color: #f00;
+		}
+		
+		.case-tabbtn {
+			height: 34px;
+			line-height: 34px;
+			overflow: hidden;
+			background: #fff;
+			border: 1px solid #009adb;
+			border-radius: 4px;
+			margin: 11px auto;
+			width: 70%;
+		}
+		
+		.case-tabbtn ul {
+			display: table;
+			width: 100%;
+		}
+		
+		.case-tabbtn li {
+			width: 20%;
+			text-align: center;
+			display: table-cell;
+			vertical-align: middle;
+		}
+		
+		.case-tabbtn li a {
+			display: block;
+			color: #333;
+			font-size: 15px;
+			border-right: 1px solid #009adb;
+		}
+		
+		.case-tabbtn li a:hover {
+			text-decoration: none;
+			color: #333;
+		}
+		
+		.case-tabbtn li.current a {
+			background: #009adb;
+			color: #fff;
+			font-weight: 700;
+		}
+		
+		.case-tabbtn li:nth-last-child(1) a {
+			border-right: none;
+		}
+		
+		.case-list {
+			margin: 30px 0;
+			overflow: hidden;
+		}
+		
+		.case-list .item1 img {
+			width: 250px;
+			height: 445px;
+			display: block;
+		}
+		
+		.case-list .item1 li {
+			position: relative;
+			float: left;
+			margin: 0 50px 30px 50px;
+			;
+			width: 250px;
+			height: 445px;
+			border: 1px solid #eee;
+			overflow: hidden;
+			cursor: pointer;
+		}
+		
+		.case-list .item1 div {
+			position: absolute;
+			left: 0;
+			bottom: 0px;
+			width: 100%;
+			height: 50px;
+			font-size: 14px;
+			text-align: center;
+			background: rgba(0, 0, 0, 0.7);
+			color: #FFF;
+			overflow: hidden;
+		}
+		
+		.case-list .item1 p {
+			display: none;
+			margin: 10px;
+			line-height: 22px;
+			text-align: left;
+			font-size: 13px;
+		}
+		
+		.case-list .item1 h3 {
+			margin: 11px 0;
+			height: 25px;
+		}
+		
+		.inside_right .content .introduce {
+			margin: 40px 50px;
+			padding-bottom: 60px;
+			border-bottom: 1px solid #f0f0f0;
+			overflow: hidden;
+		}
+		
+		.inside_right .content .introduce p {
+			font-size: 15px;
+			text-indent: 2em;
+			margin: 10px 0;
+			line-height: 24px;
+		}
+		
+		.inside_right .content .contactInfo {
+			margin: 0 50px 40px 50px;
+		}
+		
+		.inside_right .content .contactInfo dl {}
+		
+		.inside_right .content .contactInfo dt {
+			font-size: 18px;
+			color: #000;
+			background: #009adb;
+			display: table;
+			padding: 5px 15px;
+			margin: 10px 0;
+			color: #fff;
+			border-radius: 100px;
+		}
+		
+		.inside_right .content .contactInfo dd {
+			font-size: 14px;
+			line-height: 30px;
+		}
+		
+		.apiBox {
+			font-size: 14px;
+		}
+		
+		.apiBox p {
+			margin: 10px 0;
+			color: #333;
+		}
+		
+		.apiBox p a {
+			color: #4183c4;
+			line-height: 26px;
+		}
+		
+		.apiBox h4 {
+			font-size: 20px;
+			color: #000;
+			line-height: 60px;
+		}
+		
+		.apiBox h5 {
+			font-size: 16px;
+			color: #000;
+		}
+		
+		pre.prettyprint {
+			padding: 2px;
+			border: 1px solid #888;
+			background: #F6F6F6;
+			border-radius: 4px;
+			line-height: 2px;
+		}
+		
+		ol.linenums {
+			margin: 0;
+			padding: 0;
+		}
+		
+		li.L0,
+		li.L1,
+		li.L2,
+		li.L3,
+		li.L5,
+		li.L6,
+		li.L7,
+		li.L8 {
+			list-style-type: none;
+		}
+		
+		li.L1,
+		li.L3,
+		li.L5,
+		li.L7,
+		li.L9 {
+			background: #eee;
+		}
+		
+		.apiBox pre.prettyprint {
+			padding: 10px;
+			border: 1px solid #ddd;
+			white-space: pre-wrap;
+			word-wrap: break-word;
+		}
+		
+		.apiBox ol.linenums {
+			padding-left: 30px;
+			color: #999;
+		}
+		
+		.apiBox ol.linenums li {
+			list-style-type: decimal;
+			text-align: -webkit-match-parent;
+			line-height: 20px;
+		}
+		
+		.apiBox code {
+			padding: 3px;
+			border: 1px solid #ddd;
+			border-radius: 3px;
+			background: #f6f6f6;
+			font-size: 14px;
+		}
+		
+		.apiBox ol.linenums li code {
+			padding: 0;
+			border: none;
+			background: 0 0;
+		}
+		
+		.apiBox ol.linenums li code span.pun {
+			color: #660;
+			margin: 0 5px;
+		}
+		
+		.apiBox ol.linenums li code span.pun2 {
+			color: #660;
+			margin: 0 5px;
+			margin-left: 20px;
+		}
+		
+		.apiBox ol.linenums li code span.pln {
+			color: #000;
+		}
+		
+		.apiBox ol.linenums li code span.str {
+			color: #080;
+		}
+		
+		.apiBox ol.linenums li code span.str2 {
+			color: #080;
+			margin-left: 20px;
+		}
+		
+		.apiBox ol.linenums li code span.str3 {
+			color: #080;
+			margin-left: 40px;
+		}
+		
+		.apiBox table {
+			border-collapse: collapse;
+			border-spacing: 0;
+			width: 100%;
+			margin: 10px 0;
+		}
+		
+		.apiBox th {
+			padding: 0;
+			color: #333;
+			background: whitesmoke;
+			border: 1px solid #ddd;
+			padding: 6px 13px;
+			font-weight: 700;
+		}
+		
+		.apiBox td {
+			padding: 0;
+			color: #333;
+			background: whitesmoke;
+			border: 1px solid #ddd;
+			padding: 6px 13px;
+		}
+		/* ç™»å½•é¡µ */
+		
+		.login-container {
+			margin: 0 auto;
+			width: 485px;
+			height: 260px;
+			z-index: 10;
+			background: #fff;
+		}
+		
+		.login-container .login-tip {
+			font-size: 18px;
+			color: #333;
+			text-align: center;
+		}
+		
+		.login-container .login-tip .close {
+			float: right;
+			margin-right: 20px;
+			color: #fff;
+		}
+		
+		.login-container .login-tip .gou {
+			overflow: hidden;
+			margin: 40px 0 -20px -60px;
+		}
+		
+		.login-container .login-tip .gou .iconfont {
+			font-size: 28px;
+		}
+		
+		.login-container .login-tip .email-tip-send {
+			margin: 40px 0 40px -60px;
+		}
+		
+		.login-container .login-main {
+			margin: 10px auto 29px auto;
+			width: 400px;
+			height: 160px;
+		}
+		
+		.login-container .login-main p {
+			margin: 30px 0;
+			position: relative;
+		}
+		
+		.login-container .login-main .remark {
+			position: absolute;
+			left: 40px;
+			bottom: -23px;
+			color: #ff3c30;
+		}
+		
+		.login-container .login-main input {
+			height: 34px;
+			width: 250px;
+			padding-left: 10px;
+		}
+		
+		.login-container .login-main .login-email,
+		.login-password {
+			margin: 0 10px;
+		}
+		
+		.login-container .login-main .login-login {
+			margin-top: 10px;
+			display: block;
+			background: #1ca1fb;
+			width: 170px;
+			border: none;
+			color: #fff;
+			outline: none;
+			cursor: pointer;
+		}
+		
+		.login-container .login-main .login-login:hover {
+			color: #fff;
+			text-decoration: none;
+			background: #0081c6;
+		}
+		
+		.login-container .login-main .login-reg {
+			display: block;
+			float: right;
+			width: 170px;
+			border: 1px #aaa solid;
+			background: #fff;
+			line-height: 32px;
+			color: #000;
+			text-align: center;
+		}
+		
+		.login-container .login-main .login-reg:hover {
+			color: #fff;
+			text-decoration: none;
+			background: #ccc;
+		}
+		
+		.login-cover {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.3);
+			z-index: 9;
+		}
+		
+		.reg-info {
+			padding-top: 70px;
+			padding-left: 50px;
+			font-size: 16px;
+			color: #000;
+			font-family: "Microsoft Yahei", "Arial";
+		}
+		
+		.reg-info>div {
+			height: 80px;
+			width: 430px;
+			text-align: right;
+			margin-bottom: 0px;
+			display: inline-block;
+			overflow: hidden;
+		}
+		
+		.reg-info input {
+			margin: 0 15px;
+			width: 280px;
+			height: 46px;
+			line-height: 46px;
+			font-size: 16px;
+			text-indent: 0.6em;
+			color: #333;
+			border: 1px solid #bfbfbf;
+		}
+		
+		.reg-info p {
+			padding-left: 100px;
+			line-height: 22px;
+		}
+		
+		.reg-info .reg-grey {
+			color: #aaa;
+			font-size: 12px;
+			text-align: left;
+			text-indent: 3em;
+		}
+		
+		.reg-info .reg-red {
+			color: #ff3b3a;
+			font-size: 12px;
+		}
+		
+		.reg-password p {
+			width: 392px;
+		}
+		
+		.reg-verify input {
+			width: 148px;
+		}
+		
+		.reg-verify img {
+			vertical-align: middle;
+		}
+		
+		.reg-agree .reg-agree-read {
+			margin: 20px auto;
+			width: 1000px;
+			text-align: center;
+		}
+		
+		.reg-agree .reg-agree-read input {
+			position: relative;
+			width: 24px;
+			height: 24px;
+			display: inline-block;
+			vertical-align: middle;
+		}
+		
+		.reg-agree .reg-agree-read span {
+			position: relative;
+			display: inline-block;
+			vertical-align: middle;
+		}
+		
+		.reg-agree .reg-agree-sub {
+			display: block;
+			margin: 0 auto;
+			width: 400px;
+			height: 54px;
+			outline: 0;
+			border: none;
+			background: #ccc;
+			color: #fff;
+			font-size: 18px;
+			border-radius: 5px;
+			font-family: "Microsoft Yahei", "Arial";
+		}
+		
+		.reg-agree .reg-agree-enb {
+			background: #00a1f7;
+		}
+		
+		.reg-agree a {
+			color: #00a1f7;
+		}
+		
+		.company-type {
+			margin-top: 50px;
+			margin-left: 102px;
+		}
+		
+		.company-type img {
+			width: 60px;
+			display: inline-block;
+			margin-right: 30px;
+			vertical-align: middle;
+		}
+		
+		.company-type p {
+			font-size: 22px;
+			color: #bfbfbf;
+			display: inline-block;
+			vertical-align: middle;
+		}
+		
+		.email-tip {
+			margin: 0 auto;
+			width: 600px;
+			text-align: center;
+		}
+		
+		.email-tip p {
+			line-height: 30px;
+		}
+		
+		.email-tip-send {
+			margin: 40px 0;
+		}
+		
+		.email-tip-login {
+			margin: 20px 0;
+			text-align: center;
+		}
+		
+		.email-tip-login button {
+			width: 200px;
+			height: 44px;
+			border: none;
+			background: #00a1f7;
+			color: #fff;
+			font-size: 16px;
+			border-radius: 5px;
+			font-family: "Microsoft Yahei", "Arial";
+		}
+		
+		.email-tip-login input {
+			width: 200px;
+			height: 44px;
+			border: none;
+			background: #00a1f7;
+			color: #fff;
+			font-size: 16px;
+			border-radius: 5px;
+			font-family: "Microsoft Yahei", "Arial";
+		}
+		
+		.email-tip-log .company-info {
+			padding-top: 30px;
+			padding-left: 20px;
+			font-size: 14px;
+		}
+		
+		.company-info input {
+			margin: 0 20px;
+			padding-left: 10px;
+			width: 180px;
+			height: 40px;
+			border: 1px #dcdcdc solid;
+			line-height: 40px;
+		}
+		
+		.company-info input.radio {
+			margin: 0 5px 0 20px;
+			width: 18px;
+			vertical-align: middle;
+		}
+		
+		.company-info p {
+			padding-left: 204px;
+			line-height: 22px;
+		}
+		
+		.company-info>div {
+			margin-bottom: 30px;
+			width: 1000px;
+			color: #333;
+		}
+		
+		.company-info>div label {
+			text-align: right;
+			width: 180px;
+			color: #666;
+			font-size: 14px;
+			display: inline-block;
+		}
+		
+		.company-save {
+			margin: 38px auto;
+			width: 200px;
+		}
+		
+		.company-save button {
+			width: 200px;
+			height: 50px;
+			outline: 0;
+			border: none;
+			background: #007aff;
+			color: #fff;
+			font-size: 18px;
+			border-radius: 5px;
+			font-family: "Microsoft Yahei", "Arial";
+		}
+		
+		.company-save input {
+			width: 200px;
+			height: 50px;
+			outline: 0;
+			border: none;
+			background: #007aff;
+			color: #fff;
+			font-size: 18px;
+			border-radius: 5px;
+			font-family: "Microsoft Yahei", "Arial";
+		}
+		
+		.company-add select,
+		.company-industry select {
+			display: inline-block;
+			margin-left: 20px;
+			padding-left: 10px;
+			width: 190px;
+			height: 34px;
+			outline: 0;
+			border: 1px #ccc solid;
+			background-color: #fff;
+			background-image: url(../images/register/select_btn.png);
+			background-position: right;
+			background-repeat: no-repeat;
+			color: #000;
+			line-height: 34px;
+			cursor: pointer;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			font-family: "Microsoft Yahei", "Arial";
+		}
+		
+		.company-info textarea {
+			width: 434px;
+			height: 134px;
+			border: 1px #dcdcdc solid;
+			vertical-align: top;
+			margin: 0 20px;
+			line-height: 18px;
+			padding: 5px 10px;
+		}
+		
+		.element-container {
+			position: relative;
+			top: -12px;
+			left: 20px;
+			display: inline-block;
+			cursor: pointer;
+		}
+		
+		.element-pick {
+			position: absolute;
+			left: 0;
+			top: 0;
+			display: block;
+			cursor: pointer;
+			background: #eaeaea;
+			width: 70px;
+			height: 30px;
+			line-height: 30px;
+			color: #333;
+			text-align: center;
+			overflow: hidden;
+			z-index: 1;
+			border-radius: 5px;
+		}
+		
+		.element-invisible {
+			position: absolute !important;
+			left: -70px;
+			top: 0;
+			height: 30px;
+			width: 140px;
+			margin: 0;
+			padding: 0;
+			display: block;
+			cursor: pointer;
+			z-index: 10;
+			opacity: 0;
+			filter: alpha(opacity: 0);
+			z-index: 2;
+		}
+		
+		.company-pic .printscreen {
+			position: relative;
+			top: 22px;
+			left: 100px;
+			display: inline-block;
+			width: 40px;
+			height: 40px;
+			overflow: hidden;
+		}
+		
+		.company-pic .printscreen img {
+			position: absolute;
+			left: 0;
+			top: 0;
+			display: block;
+			width: 40px;
+			height: 40px;
+		}
+		
+		#company-city {
+			margin-left: 36px;
+		}
+		
+		.company-pic-req {
+			float: right;
+			margin-right: 240px;
+		}
+		
+		.company-pic-req p {
+			padding-left: 0;
+		}
+		
+		.company-pic-upload {
+			position: relative;
+			top: -10px;
+			left: 20px;
+			display: inline-block;
+			width: 170px;
+			height: 100px;
+			border: 1px #ccc solid;
+			background: #e6e6e6 url(../images/register/jiahao.png) no-repeat center;
+			vertical-align: top;
+		}
+		
+		.company-pic-upload input {
+			position: absolute;
+			top: 0;
+			left: 0;
+			margin: 0;
+			padding: 0;
+			width: 170px;
+			height: 100px;
+			opacity: 0;
+			cursor: pointer;
+			filter: alpha(opacity: 0);
+		}
+		
+		.company-pic .company-pic-req-tip {
+			color: #ff3b3a;
+			line-height: 70px;
+		}
+		
+		.footer {
+			float: left;
+			width: 100%;
+			padding: 10px 0;
+			background: #30373c;
+			color: #999;
+			line-height: 25px;
+		}
+		
+		.footer p {
+			color: #999;
+			text-align: center;
+		}
+		
+		.footer p a {
+			color: #999;
+			padding: 0 10px;
+		}
+		
+		.footer p a:hover {
+			color: #009adb;
+			text-decoration: none;
+		}
+		
+		.alert {
+			text-align: center;
+			padding: 10px;
+			margin-top: 15px;
+			background-color: #f2dede;
+		}
+		
+		.alert-danger {
+			color: #a94442;
+		}
+		
+		.accountType {
+			width: 100%;
+			margin: 80px auto 0;
+			text-align: center;
+		}
+		
+		.accountType .box {
+			width: 20%;
+			display: inline-block;
+			border: 1px solid #d2d2d2;
+			border-radius: 5px;
+			padding: 30px 0 20px;
+			margin: 0 40px;
+		}
+		
+		.accountType .box p {
+			font-size: 16px;
+			color: #bfbfbf;
+			line-height: 30px;
+		}
+		
+		input[type=submit]#nextBtn {
+			margin: 0 auto;
+			width: 400px;
+			height: 50px;
+			outline: none;
+			border: none;
+			background: none;
+			background: #00a1f7;
+			color: #eee;
+			font-size: 18px;
+			cursor: pointer;
+		}
+		
+		input[type=submit]:disabled#nextBtn {
+			background: #ccc;
+			cursor: no-drop;
+		}
+		
+		.error,
+		.corect {
+			color: #ff3b3a;
+		}
+		
+		.none,
+		.corect {
+			display: none;
+		}
+		
+		.content {
+			width: 70%;
+			padding-left: 15%;
+		}
+		
+		.liyugame {
+			font-size: 30px;
+			text-align: center;
+		}
+	</style>
+
+</html>

@@ -1,0 +1,328 @@
+<template>
+  <div class="eggNews">
+    <heador></heador>
+    <div class="content">
+      <div class="news">
+        <div class="page-top">
+          <h4 class="title" v-if="newstype ==1">{{newdetails.newstitle}}</h4>
+          <h4 class="title" v-if="newstype ==2">{{newdetails.newstitle}}</h4>
+          <h4 class="title" v-if="newstype ==3">{{newdetails.eggactivitytitle}}</h4>
+          <h4 class="title" v-if="newstype ==4">{{newdetails.eggstrategystitle}}</h4>
+          <p class="author">来源：蛋小妹</p>
+          <p class="updatetime" v-if="newstype ==1">发布时间：{{newdetails.createtime}}</p>
+          <p class="updatetime" v-if="newstype ==2">发布时间：{{newdetails.createtime}}</p>
+          <p class="updatetime" v-if="newstype ==3">发布时间：{{newdetails.createtime}}</p>
+          <p class="updatetime" v-if="newstype ==4">发布时间：{{newdetails.createtime}}</p>
+        </div>
+        <div class="page-content">
+          <p v-if="newstype ==1" v-html="newdetails.eggnewsinfo"></p>
+          <p v-if="newstype ==2" v-html="newdetails.context"></p>
+          <p v-if="newstype ==3" v-html="newdetails.eggactivityurl"></p>
+          <p v-if="newstype ==4" v-html="newdetails.eggstrategysinfo"></p>
+          
+        </div>
+        <!-- <span class="share">分享</span> -->
+      </div>
+      <div class="realatelink" v-if="relatenew">
+        <div class="news-top">
+          <h4>相关推荐</h4>
+          <ul class="newsitem">
+            <li @click="newstype1(1 , item.id)"  v-for="item in relatenew" :key="item.id" v-if="newstype == 1">
+              <i>【新闻】</i>
+              <p>{{item.newstitle}}</p>
+              <span>{{item.createtime}}</span>
+            </li>
+            <li @click="newstype1(2 , item.id)" v-for="item in relatenew" :key="item.id" v-if="newstype == 2">
+              <i>【公告】</i>
+              <p>{{item.title}}</p>
+              <span>{{item.createtime}}</span>
+            </li>
+            <li @click="newstype1(3 , item.id)"  v-for="item in relatenew" :key="item.id" v-if="newstype == 3">
+              <i>【活动】</i>
+              <p>{{item.eggactivitytitle}}</p>
+              <span>{{item.createtime}}</span>
+            </li>
+            <li  @click="newstype1(4 , item.id)" v-for="item in relatenew" :key="item.id" v-if="newstype == 4">
+              <i>【攻略】</i>
+              <p>{{item.eggstrategystitle}}</p>
+              <span>{{item.createtime}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <footer1></footer1>
+    </div>
+  </div>
+</template>
+
+<script>
+import heador from "./header";
+import { swiper, swiperSlide } from "vue-awesome-swiper";
+import "swiper/dist/css/swiper.css";
+import footer1 from "./footer";
+export default {
+  data() {
+    let vm = this;
+    return {
+      relatenew:"",
+      newstype:"",
+      newdetails : "",
+      actiontype: "",
+      index0: 0,
+      pathurl: "",
+      swiperOption1: {
+        on: {
+          slideChangeTransitionStart() {
+            vm.index0 = this.activeIndex;
+          }
+        },
+        notNextTick: true
+      }
+    };
+  },
+  mounted () {
+    this.shownews();
+    console.log(this.$route.params.id)
+  },
+  components: {
+    heador,
+    swiper,
+    swiperSlide,
+    footer1
+  },
+  computed: {
+    swiper() {
+      return this.$refs.mySwiper.swiper;
+    }
+  },
+  methods: {
+    newstype1 (val,val2) {
+      localStorage.setItem("newtype", val);
+       this.$router.push('/eggNewsDetails/'+ val2);
+       this.shownews();
+    },
+    getinit () {
+      let vm = this;
+      $.ajax({
+        type: vm.actiontype,
+        url: contextPath + vm.pathurl,
+        async: true,
+        dataType: "json",
+        data: {
+          id: vm.$route.params.id
+        },
+        success(res) {
+          if (res.state.code === "20000") {
+            vm.newdetails = res.data.news[0];
+            vm.relatenew = res.data.newsrelevant;
+            // console.log(vm.relatenew)
+            if(vm.newstype == 3) {
+              window.location.href= vm.newdetails.eggactivityurl
+            }
+          }
+        }
+      });
+    },
+    shownews () {
+      if( this.$route.query.sf == 1 ||localStorage.newtype == 1 ) {
+        if(this.$route.query.sf) {
+          localStorage.newtype = 1;
+        }
+        this.newstype = 1;
+        this.actiontype = "post"
+        this.pathurl = "/api/eggworldorg/findnewsinfobyid";
+        this.getinit ();
+      }else if(this.$route.query.sf == 2 || localStorage.newtype == 2) {
+        if(this.$route.query.sf) {
+          localStorage.newtype = 2;
+        }
+        this.newstype = 2;
+        this.actiontype = "get"
+        this.pathurl = "/api/eggworld/findnoticeById";
+        this.getinit ();
+      }else if(this.$route.query.sf == 3 || localStorage.newtype == 3 ) {
+        if(this.$route.query.sf) {
+          localStorage.newtype = 3;
+        }
+        this.newstype = 3;
+        this.actiontype = "post"
+        this.pathurl = "/api/eggworldorg/findactivitysinfobyid";
+        this.getinit ();
+      }else if(this.$route.query.sf == 4  || localStorage.newtype == 4 ) {
+        if(this.$route.query.sf) {
+          localStorage.newtype = 4;
+        }
+        this.actiontype = "post"
+        this.newstype = 4;
+        this.pathurl = "/api/eggworldorg/findnStrategysinfobyid";
+        this.getinit ();
+      }
+    },
+    changeShowMore() {
+      this.showmore = !this.showmore;
+    },
+    changenews(val) {
+      this.index0 = val;
+      this.swiper.slideTo(val, 500, false);
+    }
+  }
+};
+</script>
+
+<style scoped lang="less">
+.eggNews {
+  position: fixed;
+  background: #f3f3f3;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y:scroll; 
+  .content {
+    padding: 0.2rem;
+    background: #f3f3f3;
+    .banner {
+      width: 100%;
+      margin: 0 auto;
+    }
+    .news {
+      // height: 8.25rem;
+      background: #fff;
+      border-radius: 0.2rem;
+      padding: 0.2rem;
+      box-sizing: border-box;
+      margin-top: 0.2rem;
+      padding-bottom: 0.4rem;
+      overflow: hidden;
+      position: relative;
+      .share {
+        float: right;
+        margin-top: 0.5rem;
+        font-size: 0.24rem;
+        color: #474747;
+        &::before {
+          content: "";
+          display: inline-block;
+          width: 0.28rem;
+          height: 0.28rem;
+          background: url("../../common/img/officalwebimg/pic1/share.png")
+            no-repeat left center;
+          background-size: 100%;
+          position: relative;
+          top: 0.05rem;
+          margin-right: 0.05rem;
+        }
+      }
+      .page-top {
+        padding-bottom: 0.2rem;
+        // border-bottom: 0.01rem solid #474747;
+        position: relative;
+        &::after {
+          content: "";
+          height: 0.02rem;
+          width: 3.74rem;
+          position: absolute;
+          left: 50%;
+          bottom: 0;
+          background: #e5e5e5;
+          transform: translateX(-50%);
+        }
+        .title {
+          font-size: 0.24rem;
+          color: #ffba00;
+          text-align: center;
+          font-weight: normal;
+          margin-bottom: 0.2rem;
+        }
+        .author {
+          font-size: 0.18rem;
+          text-align: center;
+          margin-bottom: 0;
+          color: #474747;
+        }
+        .updatetime {
+          font-size: 0.2rem;
+          text-align: center;
+          color: #474747;
+        }
+      }
+      .page-content {
+        margin-top: 0.4rem;
+        p {
+          color: #474747;
+          font-size: 0.24rem;
+          margin-bottom: 0;
+          
+        }
+        
+      }
+    }
+    .realatelink {
+      height: 1.94rem;
+      background: #fff;
+      border-radius: 0.2rem;
+      padding: 0.2rem;
+      box-sizing: border-box;
+      margin-top: 0.2rem;
+      .news-top {
+        overflow: hidden;
+        margin-bottom: 0.2rem;
+        h4 {
+          font-weight: bold;
+          color: #9dbf4a;
+          float: left;
+          font-size: 0.3rem;
+          margin-bottom: 0.2rem;
+          &::before {
+            content: "";
+            display: inline-block;
+            width: 0.22rem;
+            height: 0.22rem;
+            background: url("../../common/img/officalwebimg/pic1/relatelink.png")
+              no-repeat;
+            background-size: 100%;
+            margin-right: 0.18rem;
+          }
+        }
+      }
+      .newsitem {
+        clear: both;
+          li {
+            // display: flex;
+            // justify-content: space-between;
+            // align-items: center;
+            i {
+              font-size: 0.18rem;
+              color: #474747;
+              font-style: normal;
+              // width: 0.7rem;
+              line-height: 0.4rem;
+              float: left;
+            }
+            p {
+              display: inline-block;
+              margin-bottom: 0;
+              font-size: 0.18rem;
+              padding-left: 0.1rem;
+              line-height: 0.4rem;
+              color: #474747;
+              // &::before {
+              //   content: "";
+              //   border-left: 0.02rem solid #7a7a7a;
+              //   width: 0;
+              //   line-height: 0.5rem;
+              //   margin-right: 0.1rem;
+              // }
+            }
+            span {
+              float: right;
+              font-size: 0.18rem;
+              color: #999999;
+              line-height: 0.4rem;
+            }
+          }
+        }
+    }
+  }
+}
+</style>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<script src="http://www.liyugame.com/h5sdk/h5sdk.js"></script>
+
+	<body>
+		<button class="payTest">支付</button>
+		<button class="roleTest">创建角色</button>
+	</body>
+
+	<script type="text/javascript">
+		
+		liyusdk.init();
+		var initData={
+				app_id:"25aa12fd95d8c98144ff4e6b53d003c1c176af67fa87634f",
+				mch_id:"3dz9LlKxaM",
+				open_id:liyusdk.open_id,
+				access_token:liyusdk.access_token
+		}
+		var payData = {
+			"app_id": initData.app_id,
+			"mch_id": initData.mch_id,
+			"timestampStr": "1515730603237",
+			"sign": "BMjXrKNBGD+dM2NUwYSWKxQQZ/bpMHsOmjsNTnerxhs=",
+			"bill_no": '439906701',
+			"goods_name": '游戏大礼包',
+			"total_fee": 0.01 //单位元
+		};
+		var roleData = {
+				app_id:initData.app_id,
+				open_id:initData.open_id,
+				access_token:initData.access_token,
+				mch_id:initData.mch_id,
+				server_id:"01", 
+				server_name:"服务器001", 
+				role_id:"001", 
+				role_name:"测试001", 
+				timestampStr:"1515730603237", 
+				sign:"BMjXrKNBGD+dM2NUwYSWKxQQZ/bpMHsOmjsNTnerxhs="
+		};
+		document.querySelector(".payTest").onclick = function() {
+			liyusdk.pay(payData);
+		}
+		document.querySelector(".roleTest").onclick = function() {
+			liyusdk.createRole(roleData);
+		}
+	</script>
+
+</html>
