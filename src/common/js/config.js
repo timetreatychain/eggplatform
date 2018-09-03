@@ -7,19 +7,6 @@
  * @author   Tom<Tom@liyunet.com>
  */
 
-/*
- * 
- * build
- * 
- * */
-// var contextBuild=true;
-// var  contextPath = "http://123.206.24.154:8100/egg_game";
-// var eggContextPath = "http://123.206.80.238:8090/ttc-eggworld";
-// var contextPath1 = "http://123.207.158.196:8099/timetreaty_certification";
-// var imgContextPath = "http://static.liyugame.com/asset/";
-// var contextOtcPath = "http://123.207.158.196:8090/timetreaty_push";
-
-
 
 
 /*
