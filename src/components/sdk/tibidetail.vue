@@ -76,6 +76,7 @@ export default {
   height: 100%;
   background: #eee;
   .showdetails {
+    font-size: 0.18rem;
     width: 6.4rem;
     .showdetails_inner {
       background: white;
@@ -101,12 +102,15 @@ export default {
       }
       .tibi_bot {
         p {
+          margin-bottom: 0.1rem;
+          line-height: 0.3rem;
+          height: 0.3rem;
           em {
-            width: 3rem;
+            width: 2rem;
             float: right;
             text-align: right;
             padding-left: 0.2rem;
-            font-size: 0.25rem;
+            font-size: 0.22rem;
             text-overflow: ellipsis; //必须
             white-space: nowrap; //必须
             overflow: hidden; //必须

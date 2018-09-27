@@ -1,12 +1,12 @@
 <template>
 	<div class="context">
 		<div class="title">
-			<a href="javascript:history.go(-1)"><img src="../../common/img/userCenter/arrowsb.png" alt="" class="back" /></a> 身份验证
+			<a href="javascript:history.go(-1)"><img src="../../common/img/userCenter/arrowsb.png" alt="" class="back" /></a> KYC认证
 		</div>
 		<div class="userCenter">
 			<li>
 				<span class="lable">姓名</span>
-				<input type="text" maxlength="18" class=" fr nickNameInput" id="nickNameInput" placeholder="真实姓名" :value="userDef.username" />
+				<input type="text" maxlength="18" class=" fr nickNameInput" id="nickNameInput" placeholder="真实姓名" :value="userDef.userName" />
 			</li>
 			<li>
 				<span class="lable">身份证</span>
@@ -22,11 +22,11 @@
 			</div>
 		</div>
 
-		<button class="rnasubmit" @click="setImg" v-if="state==0">提交审核</button>
-		<button class="rnasubmit" v-if="state==1">已认证</button>
-		<p class="state" v-if="state==2">信息有误 已被系统驳回</p>
-		<button class="rnasubmit" @click="setImg" v-if="state==2">重新提交</button>
-		<button class="rnasubmit"  v-if="state==4">审核中</button>
+		<button class="rnasubmit" @click="setImg" v-if="userDef.level!= 2 && state==1">提交审核</button>
+		<button class="rnasubmit" v-if="userDef.level== 2 && state==1">已认证</button>
+		<p class="state" v-if="userDef.level!= 2 && state==2">信息有误 已被系统驳回</p>
+		<button class="rnasubmit" @click="setImg" v-if="userDef.level!= 2 && state==2">重新提交</button>
+		<button class="rnasubmit"  v-if="userDef.level!= 2 && state==4">审核中</button>
 
 		<div class="pic_edit pic_edit1">
 			<div id="clipArea1" class="clipArea"></div>
@@ -93,53 +93,110 @@
 			save: function() {
 				let vm = this;
 			},
-			getDefaultData: function() {
-				let vm = this;
-				$.ajax({
-					type: "post",
-					url: contextPath + "/api/googleauthenticator/getAntiAddiction",
-					async: true,
-					dataType: "json",
-					data: {
-						token: sessionStorage.egg_token
-					},
-					success: function(data) {
-						vm.userDef = data.data;
-						vm.state=data.data.twostate;
-						if(data.data.backUrl != "") {
-							$("#hit1").attr("src", data.data.backUrl);
-						}
-						if(data.data.frontUrl != "") {
-							$("#hit2").attr("src", data.data.frontUrl);
-						}
-					}
-				});
-			},
+			// getDefaultData: function() {
+			// 	let vm = this;
+			// 	$.ajax({
+			// 		type: "post",
+			// 		url: contextPath + "/api/googleauthenticator/getAntiAddiction",
+			// 		async: true,
+			// 		dataType: "json",
+			// 		data: {
+			// 			token: sessionStorage.egg_token
+			// 		},
+			// 		success: function(data) {
+			// 			vm.userDef = data.data;
+			// 			vm.state=data.data.twostate;
+			// 			if(data.data.backUrl != "") {
+			// 				$("#hit1").attr("src", data.data.backUrl);
+			// 			}
+			// 			if(data.data.frontUrl != "") {
+			// 				$("#hit2").attr("src", data.data.frontUrl);
+			// 			}
+			// 		}
+			// 	});
+			// },
+
 			setImg: function() {
+
 				let vm = this;
+
 				if(vm.checkCode($("#codeInput").val()) == 1) {
 					$.ajax({
 						type: "post",
-						url: contextPath + "/api/googleauthenticator/uploadTwoAntiAddiction",
+						url: contextPath1 + "/api/certification/eggIdentityCard",
 						async: true,
 						dataType: "json",
 						data: {
 							token: sessionStorage.egg_token,
+							blockToken: sessionStorage.lh_token,
 							userName: $("#nickNameInput").val(),
 							identityCard: $("#codeInput").val(),
 							frontUrl: $("#hit1").attr("src"),
-							backUrl: $("#hit2").attr("src")
+							backUrl: $("#hit2").attr("src"),
+							project:1
 						},
 						success: function(data) {
+							vm.state = data.data;
 							mui.toast("上传成功!");
 							vm.$router.push({"path":"/kycSetting"});
 						}
 
 					})
-					} else {
+				} else {
 					mui.toast("请输入正确的身份证号");
 				}
 
+			},
+			// setImg: function() {
+			// 	let vm = this;
+			// 	if(vm.checkCode($("#codeInput").val()) == 1) {
+			// 		$.ajax({
+			// 			type: "post",
+			// 			url: contextPath + "/api/googleauthenticator/uploadTwoAntiAddiction",
+			// 			async: true,
+			// 			dataType: "json",
+			// 			data: {
+			// 				token: sessionStorage.egg_token,
+			// 				userName: $("#nickNameInput").val(),
+			// 				identityCard: $("#codeInput").val(),
+			// 				frontUrl: $("#hit1").attr("src"),
+			// 				backUrl: $("#hit2").attr("src")
+			// 			},
+			// 			success: function(data) {
+			// 				mui.toast("上传成功!");
+			// 				vm.$router.push({"path":"/kycSetting"});
+			// 			}
+
+			// 		})
+			// 		} else {
+			// 		mui.toast("请输入正确的身份证号");
+			// 	}
+
+			// },
+						getDefaultData: function() {
+				let vm = this;
+				$.ajax({
+					type: "post",
+					url: contextPath1 + "/api/certification/whetherKycContent",
+					async: true,
+					dataType: "json",
+					data: {
+						token: sessionStorage.egg_token,
+						blockToken: sessionStorage.lh_token,
+						project: 1
+
+					},
+					success: function(data) {
+						vm.userDef = data.data;
+						vm.state=data.data.state;
+						// if(data.data.backUrl != "") {
+						// 	$("#hit1").attr("src", data.data.backUrl);
+						// }
+						// if(data.data.frontUrl != "") {
+						// 	$("#hit2").attr("src", data.data.frontUrl);
+						// }
+					}
+				});
 			},
 			checkCode: function(num) {
 				var numArr = num.split("");
@@ -175,6 +232,7 @@
 	padding: 0 0.2rem;
 	text-align: center;
 	color: red;
+	font-size: 0.2rem;
 }
 	.rnasubmit {
 		width: 6rem;

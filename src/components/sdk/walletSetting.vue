@@ -6,12 +6,12 @@
 		</div>
 		<div class="userCenter">
 			<li>
-				<span class="lable">BIDT地址</span>
+				<span class="lable">提币地址</span>
 				<input type="text" maxlength="42" class=" fr nickNameInput" id="TTCAddInput" placeholder="BIDT钱包地址"  :value="TTCAddress" />
 			</li>
 			
 			<div class="help">
-				<p style="color: red;">温馨提示</p>1:符合erc20标准的钱包地址 均可作为BIDT提币地址(推荐imtoken)</br>2:交易所用户可将平台BIDT充币地址作为提币地址填入</br>3:更新提币地址后,账户24小时内处于保护期,保护期内提币行为不被受理.请合理安排操作时间!
+				<p style="color: red;margin-bottom: 0.2rem;">温馨提示</p>1:符合erc20标准的钱包地址 均可作为BIDT提币地址(推荐imtoken)</br>2:交易所用户可将平台BIDT充币地址作为提币地址填入</br>3:更新提币地址后,账户24小时内处于保护期,保护期内提币行为不被受理.请合理安排操作时间!
 			</div>
 		</div>
 	</div>
@@ -81,10 +81,11 @@
 <style lang="less" scoped>
 .help{
 	position: fixed;
-	top: 5rem;
+	top: 2rem;
 	text-align: left;
-	width: 100%;
-	margin-left: 50%;
+	width: 120%;
+	margin-left: 46%;
+	font-size: 0.3rem;
 	transform:  translateX(-50%) scale(0.7);
 	
 }

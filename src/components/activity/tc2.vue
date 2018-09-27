@@ -4,7 +4,7 @@
       <img v-show="index0 == 0" src="../../common/img/activity/activity2/pto2.png" alt="">
       <img v-show="index0 == 1" src="../../common/img/activity/activity2/pto3.png" alt="">
       <img v-show="index0 == 2" src="../../common/img/activity/activity2/pto4.png" alt="">
-      <img v-show="index0 == 3" src="../../common/img/pic5.jpg" alt="">
+      <img v-show="index0 == 3" src="../../common/img/activity/activity2/pic5.png" alt="">
       <span id="qrcode5" ref="qrcode5" :class="{'img4' : index0 == 3}"></span>
       <!-- <span id="qrcode4 img4" ref="qrcode4" v-show="index0 == 3"></span> -->
     </div>
@@ -76,9 +76,9 @@ import "../../common/js/jqr.js";
       // border: 0.01rem solid red;
     }
     .img4 {
-      position: absolute;
+      /*position: absolute;
       left: 0.4rem;
-      bottom: 0.5rem;
+      bottom: 0.5rem;*/
     }
   }
 

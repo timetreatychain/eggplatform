@@ -5,21 +5,21 @@
 		</div>
 		<div class="userCenter">
 			<router-link to='/realNameAuthentication'>
-				<li  v-if="antiAddictionState!=1">
-					<span class="lable">账户认证</span>
+				<li  v-if="antiAddictionState == 0">
+					<span class="lable">KYC认证一级</span>
 					<span class="point"></span>
 				</li>
 			</router-link>
-			<li v-if="antiAddictionState==1">
-					<span class="lable">账户认证</span>
+			<li v-if="antiAddictionState==1 || antiAddictionState==2">
+					<span class="lable">KYC认证一级</span>
 					<span class="pointOk">已认证</span>
 				</li>
-			<li  v-if="antiAddictionTwoState!=1" @click="realVip">
-					<span class="lable">实名认证</span>
+			<li  v-if="antiAddictionTwoState !=2" @click="realVip">
+					<span class="lable">KYC认证二级</span>
 					<span class="point"></span>
 			</li>
-			<li v-if="antiAddictionTwoState==1">
-					<span class="lable">实名认证</span>
+			<li v-if="antiAddictionTwoState==2">
+					<span class="lable">KYC认证二级</span>
 					<span class="pointOk">已认证</span>
 				</li>
 		</div>
@@ -99,20 +99,42 @@
 				let vm =this;
 				vm.$router.push({path:"verification",query:{vType:"2",accessToken:vm.accessToken}})
 			},
-			getAddress: function() {
+// 			getAddress: function() {
+// 				let vm = this;
+// 				$.ajax({
+// 					type: "post",
+// 					url: contextPath + "/api/googleauthenticator/getAdvancedSettings",
+// 					async: true,
+// 					dataType: "json",
+// 					data: {
+// 						token: vm.accessToken
+// 					},
+// 					success: function(data) {
+// 						vm.TTCAddress = data.data.walletAddress;
+// 						vm.antiAddictionState = data.data.antiAddictionState;
+// 						vm.antiAddictionTwoState = data.data.antiAddictionTwoState;
+// //						vm.googleAuthenticatorInfoState = data.data.googleAuthenticatorInfoState;
+// 					}
+// 				});
+// 			},
+getAddress: function() {
 				let vm = this;
 				$.ajax({
 					type: "post",
-					url: contextPath + "/api/googleauthenticator/getAdvancedSettings",
+					url: contextPath1 + "/api/certification/whetherKyc",
 					async: true,
 					dataType: "json",
 					data: {
-						token: vm.accessToken
+						// token: vm.accessToken
+						token: sessionStorage.egg_token,
+						project: 1
 					},
 					success: function(data) {
-						vm.TTCAddress = data.data.walletAddress;
-						vm.antiAddictionState = data.data.antiAddictionState;
-						vm.antiAddictionTwoState = data.data.antiAddictionTwoState;
+						// vm.TTCAddress = data.data.walletAddress;
+						// vm.antiAddictionState = data.data.antiAddictionState;
+						// vm.antiAddictionTwoState = data.data.antiAddictionTwoState;
+						vm.antiAddictionTwoState = data.data;
+						vm.antiAddictionState = data.data;
 //						vm.googleAuthenticatorInfoState = data.data.googleAuthenticatorInfoState;
 					}
 				});

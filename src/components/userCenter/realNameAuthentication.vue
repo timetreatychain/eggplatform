@@ -1,12 +1,12 @@
 <template>
 	<div class="context">
 		<div class="title">
-			<a href="javascript:history.go(-1)"><img src="../../common/img/userCenter/arrowsb.png" alt="" class="back" /></a> 身份验证
+			<a href="javascript:history.go(-1)"><img src="../../common/img/userCenter/arrowsb.png" alt="" class="back" /></a> KYC认证
 		</div>
 		<div class="userCenter">
 			<li>
 				<span class="lable">姓名</span>
-				<input type="text" maxlength="18" class=" fr nickNameInput" id="nickNameInput" placeholder="真实姓名" :value="userDef.username" />
+				<input type="text" maxlength="18" class=" fr nickNameInput" id="nickNameInput" placeholder="真实姓名" :value="userDef.userName" />
 			</li>
 			<li>
 				<span class="lable">身份证</span>
@@ -93,15 +93,45 @@
 			save: function() {
 				let vm = this;
 			},
+			// getDefaultData: function() {
+			// 	let vm = this;
+			// 	$.ajax({
+			// 		type: "post",
+			// 		url: contextPath + "/api/googleauthenticator/getAntiAddiction",
+			// 		async: true,
+			// 		dataType: "json",
+			// 		data: {
+			// 			token: sessionStorage.egg_token
+			// 		},
+			// 		success: function(data) {
+			// 			vm.userDef = data.data;
+			// 			vm.state=data.data.state;
+			// 			if(data.data.backUrl != "") {
+			// 				$("#hit1").attr("src", data.data.backUrl);
+			// 			}
+			// 			if(data.data.frontUrl != "") {
+			// 				$("#hit2").attr("src", data.data.frontUrl);
+			// 			}
+			// 		}
+			// 	});
+			// },
+
 			getDefaultData: function() {
+				if(!sessionStorage.lh_token) {
+					mui.toast("请你先绑定区块身份");
+					this.$router.push('/blockIdentity');
+				}
 				let vm = this;
 				$.ajax({
 					type: "post",
-					url: contextPath + "/api/googleauthenticator/getAntiAddiction",
+					url: contextPath1 + "/api/certification/whetherKycContent",
 					async: true,
 					dataType: "json",
 					data: {
-						token: sessionStorage.egg_token
+						token: sessionStorage.egg_token,
+						blockToken: sessionStorage.lh_token,
+						project: 1
+
 					},
 					success: function(data) {
 						vm.userDef = data.data;
@@ -115,6 +145,37 @@
 					}
 				});
 			},
+
+
+
+			// setImg: function() {
+
+			// 	let vm = this;
+
+			// 	if(vm.checkCode($("#codeInput").val()) == 1) {
+			// 		$.ajax({
+			// 			type: "post",
+			// 			url: contextPath + "/api/googleauthenticator/uploadAntiAddiction",
+			// 			async: true,
+			// 			dataType: "json",
+			// 			data: {
+			// 				token: sessionStorage.egg_token,
+			// 				userName: $("#nickNameInput").val(),
+			// 				identityCard: $("#codeInput").val(),
+			// 				frontUrl: $("#hit1").attr("src"),
+			// 				backUrl: $("#hit2").attr("src")
+			// 			},
+			// 			success: function(data) {
+			// 				mui.toast("上传成功!");
+			// 				vm.$router.push({"path":"/kycSetting"});
+			// 			}
+
+			// 		})
+			// 	} else {
+			// 		mui.toast("请输入正确的身份证号");
+			// 	}
+
+			// },
 			setImg: function() {
 
 				let vm = this;
@@ -122,17 +183,20 @@
 				if(vm.checkCode($("#codeInput").val()) == 1) {
 					$.ajax({
 						type: "post",
-						url: contextPath + "/api/googleauthenticator/uploadAntiAddiction",
+						url: contextPath1 + "/api/certification/eggIdentityCard",
 						async: true,
 						dataType: "json",
 						data: {
 							token: sessionStorage.egg_token,
+							blockToken: sessionStorage.lh_token,
 							userName: $("#nickNameInput").val(),
 							identityCard: $("#codeInput").val(),
-							frontUrl: $("#hit1").attr("src"),
-							backUrl: $("#hit2").attr("src")
+							// frontUrl: $("#hit1").attr("src"),
+							// backUrl: $("#hit2").attr("src"),
+							project:1
 						},
 						success: function(data) {
+							vm.state = data.data;
 							mui.toast("上传成功!");
 							vm.$router.push({"path":"/kycSetting"});
 						}

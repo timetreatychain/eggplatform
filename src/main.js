@@ -13,7 +13,7 @@ Vue.use(VueQuickLoadmore)
 import Cube from 'cube-ui'
 
 Vue.use(Cube)
-
+window.eventBus = new Vue()
 
 /* eslint-disable no-new */
 new Vue({

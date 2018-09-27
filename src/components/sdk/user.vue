@@ -25,6 +25,29 @@
 			}
 		},
 		methods: {
+			getinit () {
+      let vm = this;
+      $.ajax({
+						url:  contextPath1+"/api/banding/judgeBanding",
+						type: "post",
+						async: true,
+						dataType: "json",
+						data: {
+							// token:sessionStorage.egg_token,
+              // count:amount
+              token: sessionStorage.egg_token,
+              project: 1
+						},
+						success: function(data) {
+                vm.hasbd = data.data.status;
+                if(vm.hasbd == 1) {
+									sessionStorage.lh_token = data.data.token;
+									vm.getasset();
+                  // vm.$router.push("/bindingBlockIdentity");
+                }
+						}
+					});
+    },
 			changeNav: function(i) {
 				console.log(i);
 				let vm = this;

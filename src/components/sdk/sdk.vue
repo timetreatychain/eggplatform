@@ -51,7 +51,8 @@
 		<div class="aliPay" v-html="aliPayForm"></div>
 
 		<div class="controlBall" id="controlBall">
-			<img src="../../common/img/sdk/logo.png" />
+			 <img src="../../common/img/sdk/logo.png" /> 
+			<!--<img src="../../common/img/lottery/enter3.png" />-->
 		</div>
 		<div class="slideBox2" @click="hideSlide" v-if="slideShow===1">
 
@@ -67,14 +68,18 @@
 					<span>客服</span>
 				</div>
 			</div>
-			<router-link to="/currency"> <div class="getBalance">
-				<span class="balanceTitle">钱包余额:(BIDT)</span>
-				<span class="balanceValue">{{initdata1.account}}</span>
+			<!-- <router-link to="/currency">  -->
+			<div class="getBalance" @click="goqbye">
+				<span class="balanceTitle">我的资产:(BIDT)</span>
+				<!-- <span v-if="hasbd == 1" class="balanceValue">{{initdata1.account}}</span> -->
+				<span v-if="hasbd == 1" class="balanceValue">{{total}}</span>
+				<span v-if="hasbd == 0" class="balanceValue">请绑定区块身份</span>
 				 <!--<span class="getbtn">提币</span>-->
-			</div></router-link>
+			</div>
+			<!-- </router-link> -->
 			<div class="nav">
 				<a href="http://ew.liyugame.com/officialWeb"><li>游戏官网</li></a>
-				<router-link to="/getCoinSetting"> <li >提币设置</li></router-link>
+				<!-- <router-link to="/getCoinSetting"> <li >提币设置</li></router-link> -->
 				<router-link to="/blockIdentity"> <li >区块身份</li></router-link>
 				<!--<router-link :to="{ path: 'walletSetting', query: { accessToken: accessToken }}" ><li>提币地址</li></router-link>-->
 				<!-- <router-link to="/browser"> <li >区块地址</li></router-link> -->
@@ -87,6 +92,7 @@
 				<!--<router-link to="/activityends"> <li >活动结束</li></router-link>-->
 				<router-link to="/noticeList"> <li >系统公告</li></router-link>
 				<router-link to="/notice?id=12"> <li >生态浏览器算法公示</li></router-link>
+				<!--<router-link to="/lottery"> <li   class="lottery">中秋幸运大抽奖</li></router-link>-->
 				<!--<router-link to="/coinActivity"> <li >TTC空投活动</li></router-link>-->
 
 				
@@ -152,11 +158,98 @@
 				psotttcdata:"",
 				accessToken:sessionStorage.egg_token,
 				initdata1:"",
-				refreshBtn:0
+				refreshBtn:0,
+				hasbd:"",
+				total:"",
 
 			}
 		},
 		methods: {
+			getasset () {
+      let vm = this;
+      $.ajax({
+						url:  contextPath1+"/app/api/content/getProperty",
+						type: "post",
+						async: true,
+						dataType: "json",
+						data: {
+							// token:sessionStorage.egg_token,
+              // count:amount
+              token: sessionStorage.lh_token,
+              // project: 1
+						},
+						success: function(data) {
+              vm.total = data.data.total;
+              // data.data.list.map((item) => {
+              //   if(item.appName == 1) {
+              //     vm.list[1] = item;
+              //   }else  if(item.appName == 0) {
+              //     vm.list[0] = item;
+              //   }
+              // })
+              console.log(vm.list);
+
+                // vm.status = data.data.status;
+                // vm.datainfo = data.data;
+                // if(vm.datainfo.blockId) {
+                //   sessionStorage.qkid = data.data.blockId
+                // }
+                // sessionStorage.qkid = data.data.blockId
+						}
+					});
+    },
+			getinit () {
+				if(!sessionStorage.egg_token) {
+					return;
+				}
+      let vm = this;
+      $.ajax({
+						url:  contextPath1+"/api/banding/judgeBanding",
+						type: "post",
+						async: true,
+						dataType: "json",
+						data: {
+							// token:sessionStorage.egg_token,
+              // count:amount
+              token: sessionStorage.egg_token,
+              project: 1
+						},
+						success: function(data) {
+                vm.hasbd = data.data.status;
+                if(vm.hasbd == 1) {
+									sessionStorage.lh_token = data.data.token;
+									vm.getasset();
+                  // vm.$router.push("/bindingBlockIdentity");
+                }
+						}
+					});
+    },
+			goqbye () {
+				// getinit () {
+      let vm = this;
+      $.ajax({
+						url:  contextPath1+"/api/banding/judgeBanding",
+						type: "post",
+						async: true,
+						dataType: "json",
+						data: {
+							// token:sessionStorage.egg_token,
+              // count:amount
+              token: sessionStorage.egg_token,
+              project: 1
+						},
+						success: function(data) {
+                let hasbd = data.data.status;
+                if(hasbd == 1) {
+                  sessionStorage.lh_token = data.data.token;
+                  vm.$router.push("/myAssets");
+                }else {
+									vm.$router.push("/blockIdentity");
+								}
+						}
+					});
+    // },
+			},
 			refFun:function(){
 				location.reload();
 			},
@@ -601,6 +694,8 @@
 							vm.$router.push({
 								path:'/update'
 							})
+						}else {
+							vm.getinit();
 						}
 					}
 				});
@@ -616,11 +711,13 @@
 		},
 		created(){
 			if(contextBuild){
-				this.check()
+				this.check();
 			}
 		},
 		mounted: function() {
+			this.getinit();
 			let vm = this;
+			vm.getinit();
 			document.addEventListener('plusready', function(){
      			vm.refreshBtn=1;
    			});

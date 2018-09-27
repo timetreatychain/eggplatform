@@ -13,7 +13,7 @@
           <img src="../../common/img/blockidenty/avator.png" v-if="!datainfo.picUrl!=''" />
 
           <label for="up_img1">
-            <input type="file" accept="image/*" id="up_img1" @change="up_face(this)" />
+            <!-- <input type="file" accept="image/*" id="up_img1" @change="up_face(this)" /> -->
           </label>
         </p>
         <p class="info1" v-if="status == 0">当前登录的区块身份ID：{{qkid}}</p>
@@ -32,24 +32,38 @@
       <p @click="goback1">暂不绑定</p>
     </div>
     <ul class="finaly" v-if="status == 1">
-      <li>
+      <li @click="gocurrency">
         <span>总资产</span>
         <p>
-          <i>查看你在TTC生态内的所有资产</i>
-          <em>火速开发中，敬请期待</em>
+          <!-- <i>查看你在TTC生态内的所有资产</i>-->
+          <em>{{total}}BIDT</em> 
+          <i class="more"></i>
         </p>
       </li>
-      <li>
+      <li @click="gosfrz">
+        <span>身份认证</span>
+        <p>
+          <i class="more"></i>
+        </p>
+      </li>
+      <li @click="gootc">
+        <span>OTC交易</span>
+        <p>
+          <i class="more"></i>
+        </p>
+      </li>
+      <!-- <li>
         <span>区块地址</span>
         <p>
           <i>{{datainfo.blockAddress}}</i>
         </p>
-      </li>
-      <li>
+      </li> -->
+      <li @click="authorizationBinding">
         <span>授权绑定</span>
         <p>
-          <i>蛋生的世界</i>
-          <em>账号：{{datainfo.account}}</em>
+           <i class="more"></i>
+          <!-- <i>蛋生的世界</i>
+          <em>账号：{{datainfo.account}}</em> -->
         </p>
       </li>
     </ul>
@@ -65,13 +79,55 @@ export default {
       status: 0,
       qkid: sessionStorage.qkid,
       mynum: JSON.parse(sessionStorage.egg_userData).phoneNum,
-      datainfo:""
+      datainfo:"",
+      accessToken:sessionStorage.egg_token,
+      cardinfo:"",
+      total:0
     };
   },
   mounted () {
     this.getinit();
+    this.getinfo ();
+    this.getasset();
   },
   methods: {
+    gocurrency () {
+      this.$router.push('/myAssets');
+    },  
+    checkOtcBind () {
+      let vm = this;
+      $.ajax({
+						url:  contextPath1+"/api/certification/whetherBandingOtc",
+						type: "post",
+						async: true,
+						dataType: "json",
+						data: {
+							// token:sessionStorage.egg_token,
+              // count:amount
+              token: sessionStorage.lh_token,
+              project: 2
+						},
+						success: function(data) {
+                vm.otcBindStatus = data.data;
+                if(vm.otcBindStatus != 0) {
+                  vm.$router.push('/manageOtc')
+                }else {
+                  vm.$router.push("/loginOtc");
+                }
+						}
+					});
+    },
+    gootc () {
+      this.checkOtcBind();
+      // this.$router.push("/loginOtc");
+    },
+    gosfrz () {
+      this.$router.push({ path: '/AdvancedSetting', query: { accessToken: this.accessToken }})
+    },
+    //跳转 授权绑定
+    authorizationBinding () {
+      this.$router.push("/authorizationBinding")
+    },
     getinit () {
       let vm = this;
       $.ajax({
@@ -88,11 +144,66 @@ export default {
 						success: function(data) {
                 vm.status = data.data.status;
                 vm.datainfo = data.data;
+                if(vm.datainfo.blockId) {
+                  sessionStorage.qkid = data.data.blockId
+                }
+                // sessionStorage.qkid = data.data.blockId
+						}
+					});
+    },
+    getasset () {
+      let vm = this;
+      $.ajax({
+						url:  contextPath1+"/app/api/content/getProperty",
+						type: "post",
+						async: true,
+						dataType: "json",
+						data: {
+							// token:sessionStorage.egg_token,
+              // count:amount
+              token: sessionStorage.lh_token,
+              // project: 1
+						},
+						success: function(data) {
+              vm.total = data.data.total
+                // vm.status = data.data.status;
+                // vm.datainfo = data.data;
+                // if(vm.datainfo.blockId) {
+                //   sessionStorage.qkid = data.data.blockId
+                // }
+                // sessionStorage.qkid = data.data.blockId
+						}
+					});
+    },
+     getinfo () {
+      let vm = this;
+      $.ajax({
+						url:  contextPath+"/api/blockinfo/getUserIdcard",
+						type: "post",
+						async: true,
+						dataType: "json",
+						data: {
+							// token:sessionStorage.egg_token,
+              // count:amount
+              token: sessionStorage.egg_token,
+              // project: 1
+						},
+						success: function(data) {
+                vm.cardinfo = data.data;
+                // vm.status = data.data.status;
+                // vm.datainfo = data.data;
+                // sessionStorage.qkid = data.data.blockId
 						}
 					});
     },
     qrbd () {
       let vm = this;
+      let level1;
+      if(vm.cardinfo && vm.cardinfo.twostate == 1) {
+        level1 = 2;
+      }else {
+        level1 = 1;
+      }
       $.ajax({
 						url:  contextPath1+"/api/banding/getAccredityId",
 						type: "post",
@@ -104,6 +215,13 @@ export default {
               project: 1,
               // account: sessionStorage.mynum,
               account: JSON.parse(sessionStorage.egg_userData).phoneNum,
+              identityCard: vm.cardinfo && vm.cardinfo.identityCard || "",
+              userName:vm.cardinfo && vm.cardinfo.username  || "",
+              frontUrl:vm.cardinfo && vm.cardinfo.frontUrl || "",
+              backUrl: vm.cardinfo && vm.cardinfo.backUrl || "",
+              status:vm.cardinfo && vm.cardinfo.state || 1,
+              level:level1
+
 						},
 						success: function(data) {
                 vm.datainfo = data.data;
@@ -226,12 +344,13 @@ export default {
         }
       }
       .info1 {
-        color: #fff;
+        color: #000;
         font-weight: 300;
         text-align: center;
         font-size: 0.2rem;
       }
       .info2 {
+        color: #fff;
         margin: 0 auto;
         width: 3.5rem;
         margin-top: 0.1rem;
@@ -256,7 +375,7 @@ export default {
       background: #fff;
       margin-bottom: 0.1rem;
       span {
-        width: 1.2rem;
+        width: 1.4rem;
         color: #999;
         // text-align: center;
         font-size: 0.3rem;
@@ -268,13 +387,25 @@ export default {
         color: #333;
       }
       em {
-        color: #999;
+        display: inline-block;
+        color: #000;
+        //  line-height: 1rem;
+        vertical-align: top;
+        margin-top: 0.2rem;
+        font-size: 0.28rem;
       }
       i,em{
         font-weight: 300;
         text-align: right;
-        display: block;
+        display: inline-block;
         font-style: normal;
+       
+      }
+      .more  {
+        display: inline-block;
+        width: 0.3rem;
+        height: 0.4rem;
+        background: url('../../common/img/blockidenty/more.png') center no-repeat;
       }
     }
   }

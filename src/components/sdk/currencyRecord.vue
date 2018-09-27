@@ -189,6 +189,7 @@ export default {
         padding-top: 0.2rem;
         height: 0.2rem;
         line-height: 0.2rem;
+        margin-bottom: 0.1rem;
         &:nth-child(1) {
           color: #000;
           font-size: 0.25rem;

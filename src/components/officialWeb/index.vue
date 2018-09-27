@@ -129,6 +129,7 @@
     </div>
 
     <div class="dtz" @mousedown="down" @touchstart="down" @mousemove="move(oW)" @touchmove="move(oW)" @mouseup="end" @touchend="end" id="moveDiv" @click="showlinkme"></div>
+   <!-- <div class="dtz1" @mousedown="down1" @touchstart="down1" @mousemove="move1(oW)" @touchmove="move1(oW)" @mouseup="end1" @touchend="end1" id="moveDiv1" @click="enterGame"></div>-->
     <fadeAnimation>
       <div class="tc" v-if="showtc">
         <i class="close1" @click="hidetc"></i>
@@ -171,10 +172,24 @@ export default {
       dy: "",
       xPum: "",
       yPum: "",
+
+
+      flags1: false,
+      position1: {
+        x: 0,
+        y: 0
+      },
+      nx1: "",
+      ny1: "",
+      dx1: "",
+      dy1: "",
+      xPum1: "",
+      yPum1: "",
       shownav: 0,
       index0: 0,
       showmore: true,
       oW: "",
+      oW1: "",
       swiperOption: {
         effect: "coverflow",
         grabCursor: true,
@@ -185,7 +200,7 @@ export default {
           delay: 2500 //使图片可以自动播放
         },
 
-        initialSlide: 1,
+        initialSlide: 0,
         // loop:true,
         coverflowEffect: {
           rotate: 10,
@@ -242,6 +257,9 @@ export default {
     }
   },
   methods: {
+    enterGame () {
+      this.$router.push('/lottery');
+    },
     hidetc() {
       this.showtc = false;
       document.documentElement.style.overflow = "scroll";
@@ -286,12 +304,6 @@ export default {
         }
       });
     },
-
-
-
-
-
-
 
     getinit () {
       let vm = this;
@@ -474,7 +486,89 @@ export default {
       this.flags = false;
       document.documentElement.style.overflow = "scroll";
       document.body.style.overflow = "scroll";
+    },
+
+
+
+    // 第二个悬浮球
+       // 实现移动端拖拽
+    down1() {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+      this.flags1 = true;
+      var touch;
+      if (event.touches) {
+        touch = event.touches[0];
+      } else {
+        touch = event;
+      }
+      this.position1.x = touch.clientX;
+      this.position1.y = touch.clientY;
+      this.dx1 = moveDiv1.offsetLeft;
+      this.dy1 = moveDiv1.offsetTop;
+      
+    },
+    move1(val2) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+      if (this.flags1) {
+        var touch;
+        if (event.touches) {
+          touch = event.touches[0];
+        } else {
+          touch = event;
+        }
+        this.nx1 = touch.clientX - this.position1.x;
+        this.ny1 = touch.clientY - this.position1.y;
+        this.xPum1 = this.dx1 + this.nx1;
+        this.yPum1 = this.dy1 + this.ny1;
+        if (this.xPum1 >= val2 - 1 * fontSizes) {
+          this.xPum1 = val2 - 1 * fontSizes;
+        }
+        if (this.xPum1 <= 0) {
+          this.xPum1 = -10;
+        }
+
+        moveDiv1.style.left = this.xPum1 + "px";
+        moveDiv1.style.top = this.yPum1 + "px";
+        //阻止页面的滑动默认事件
+        // document.addEventListener("touchmove",function(e){
+        //     e.preventDefault();
+        // },false);
+      }
+    },
+    //鼠标释放时候的函数
+    end1() {
+      if (this.xPum1 <= this.oW / 2) {
+        console.log(this.xPum1);
+        console.log(this.oW / 2);
+        console.log(111111111111111)
+        this.xPum1= -10;
+      } else {
+        console.log(this.xPum1);
+        console.log(this.oW);
+        console.log(22222222222222222)
+        this.xPum1 = this.oW - 1 * fontSizes;
+      }
+      console.log(this.xPum1)
+      moveDiv1.style.left = this.xPum1 + "px";
+
+      moveDiv1.style.top = this.yPum1 + "px";
+      this.flags1 = false;
+      document.documentElement.style.overflow = "scroll";
+      document.body.style.overflow = "scroll";
     }
+
+
+
+
+
+
+
+
+
+
+
   }
 };
 </script>
@@ -531,6 +625,17 @@ export default {
   top: 50%;
   z-index: 9999999999999;
 }
+.dtz1 {
+  width: 1.4rem;
+  height: 1.4rem;
+  background: url("../../common/img/lottery/enter2.png") no-repeat;
+  background-size: 100%;
+  position: fixed;
+  left: 0;
+  top: 60%;
+  z-index: 9999999999999;
+}
+
 
 .content .carouls /deep/ .swiper-inner {
   width: 100%;

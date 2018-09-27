@@ -12,6 +12,10 @@ import Verification from '../components/userCenter/verification.vue'
 import Otc from '../components/userCenter/otc.vue'
 
 import Egg from '../components/sdk/sdk.vue'
+import loginOtc from '../components/sdk/loginOtc'
+import bindOtc from '../components/sdk/bindOtc'
+import manageOtc from '../components/sdk/manageOtc'
+import authorizationBinding from '../components/sdk/authorizationBinding'
 import NoticeList from '../components/sdk/noticeList.vue'
 import Notice from '../components/sdk/notice.vue'
 import User from '../components/sdk/User.vue'
@@ -24,6 +28,7 @@ import GetCoinSetting from '../components/userCenter/getCoinSetting.vue'
 
 
 import currencyRecord from '../components/sdk/currencyRecord.vue'
+import myAssets from '../components/sdk/myAssets'
 import currency from '../components/sdk/currency.vue'
 import tibidetail from '../components/sdk/tibidetail.vue'
 import blockIdentity from '../components/sdk/blockIdentity.vue'
@@ -34,7 +39,9 @@ import findpassword from '../components/sdk/findpassword'
 import findBlockId from '../components/sdk/findBlockId'
 import resetPassword from '../components/sdk/resetPassword'
 import EggActivity from '../components/activity/activity1'
+import lottery from '../components/activity/lottery'
 import EggActivityAg from '../components/activity/activity2'
+import activityReward from '../components/officialWeb/activityReward'
 
 import UserEdit from '../components/userCenter/userEdit.vue'
 import * as PhotoClip from "../common/js/PhotoClip.js"
@@ -120,19 +127,19 @@ export default new Router({
     path: '/advancedSetting',
     name: "AdvancedSetting",
     component: AdvancedSetting
-  }, 
+  },
   {
     path: '/otc',
     name: "Otc",
     component: Otc
-  }, 
-   {
+  },
+  {
     path: '/getCoinSetting',
     name: "GetCoinSetting",
     component: GetCoinSetting
-  }, 
-  
-  
+  },
+
+
   {
     path: '/kycSetting',
     name: "KycSetting",
@@ -296,14 +303,46 @@ export default new Router({
     path: '/resetPassword',
     component: resetPassword
   },
-  
-  
-  
-  
-  
-  
-  
-  
+  {
+    path: '/authorizationBinding',
+    component: authorizationBinding
+  },
+  {
+    path: '/loginOtc',
+    component: loginOtc
+  },
+  {
+    path: '/manageOtc',
+    component: manageOtc
+  },
+  {
+    path: '/bindOtc',
+    component: bindOtc
+  },
+  {
+    path: '/activityReward',
+    component: activityReward
+  },
+  {
+    path: '/myAssets',
+    component: myAssets
+  },
+  {
+    path: '/lottery',
+    component: lottery
+  },
+
+
+
+
+
+
+
+
+
+
+
+
   ],
   // scrollBehavior (to, from, savedPosition) {
   //   return { x: 0, y: 0 }

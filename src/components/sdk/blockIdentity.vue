@@ -80,6 +80,7 @@ export default {
 						success: function(data) {
                 vm.hasbd = data.data.status;
                 if(vm.hasbd == 1) {
+                  sessionStorage.lh_token = data.data.token;
                   vm.$router.push("/bindingBlockIdentity");
                 }
 						}

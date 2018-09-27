@@ -4,24 +4,31 @@
 			<router-link to ="/egg"><img src="../../common/img/userCenter/arrowsb.png" alt="" class="back" /></router-link>提币设置
 		</div>
 		<div class="userCenter">
-			<router-link :to="{ path: 'AdvancedSetting', query: { accessToken: accessToken }}">
+			<!-- <router-link :to="{ path: 'AdvancedSetting', query: { accessToken: accessToken }}">
 				<li >
 					<span class="lable">双重认证</span>
 					<span class="point"></span>
 				</li>
-			</router-link>
-			<router-link  to="otc" >
+			</router-link> -->
+			
+			<router-link  to="blockIdentity" >
 				<li>
 					<span class="lable">提币到OTC交易</span>
 					<span class="point"></span>
 				</li>
 			</router-link>
-			<router-link :to="{ path: 'walletSetting', query: { accessToken: accessToken }}"   >
+			<!-- <router-link  to="otc" >
+				<li>
+					<span class="lable">提币到OTC交易</span>
+					<span class="point"></span>
+				</li>
+			</router-link> -->
+			<!-- <router-link :to="{ path: 'walletSetting', query: { accessToken: accessToken }}"   >
 				<li>
 					<span class="lable">提币到个人钱包</span>
 					<span class="point"></span>
 				</li>
-			</router-link>
+			</router-link> -->
 				
 		</div>
 		<div class="pic_edit pic_edit1">

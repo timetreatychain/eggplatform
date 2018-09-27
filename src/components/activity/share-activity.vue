@@ -32,11 +32,11 @@
 			</div>
 			<div class="getreward sharepic" v-if="state1 == 1" @click="shareposter">
 			</div>
-			<p class="tipinfo">晒一晒本期分红结果</p>
+			<p class="tipinfo"></p>
 		</div>
 		<div class="footer">
-			<p>活动规则：</p>
-			<p>1.分红奖励领取时间：9月1号~9月15号;</p>
+			<p>&nbsp;</p>
+			<p>1.分红奖励领取时间：9月16号~9月30号;</p>
 			<p>
 				2.没有在规定时间内领取的奖励将自动放入下期分红矿池;
 			</p>
@@ -471,7 +471,7 @@
 				font-size: 0.21rem;
 				line-height: 0.5rem;
 				color: #ffffff;
-				margin-bottom: 0rem;
+				margin-bottom: 0rem;7
 				&:nth-of-type(1) {
 					font-size: 0.3rem;
 					color: #ffffff;

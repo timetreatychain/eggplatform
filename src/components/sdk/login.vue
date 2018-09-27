@@ -82,6 +82,10 @@ export default {
       let vm = this;
       vm.setCookie(name, "", -1);
     },
+
+
+
+
     showQrCheck: function(code) {
       let vm = this;
       $.ajax({

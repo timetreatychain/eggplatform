@@ -8,18 +8,17 @@
  */
 
 
-
 /*
  * 
  * dev
  * 
  * */
-// var contextBuild=true;
-// var contextPath = "http://192.168.0.6:8080/egg_game";
-// var contextPath1 = "http://192.168.0.76:8070/timetreaty_certification";
-// var contextOtcPath = "http://192.168.0.74:8060/timetreaty_push";
-// var eggContextPath = "http://192.168.0.61:8080/ttc-eggworld";
-// var imgContextPath = "http://static.liyugame.com/asset/";
+var contextBuild=true;
+var contextPath = "http://192.168.0.6:8080/egg_game";
+var contextPath1 = "http://192.168.0.16:8070/timetreaty_certification";
+var contextOtcPath = "http://192.168.0.16:8060/timetreaty_push";
+var eggContextPath = "http://192.168.0.61:8080/ttc-eggworld";
+var imgContextPath = "http://static.liyugame.com/asset/";
 
 /**
  * 获取地址

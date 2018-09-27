@@ -41,7 +41,7 @@
 			<div class="prompt">
 				<p>温馨提示</p>
 				<p class="m20">1.提币手续费100BIDT,系统将自动将手续费从提取数量中扣除</p>
-				<p class="m20">2.为保障资金安全，当您账户安全策略变更、密码修改、使用新地址提币，我们会对提币进行人工审核，请耐心等待工作人员联系</p>
+				<p class="m20">2.为保障资金安全，当您账户安全策略变更、密码修改、使用新地址提币，我们会对提币进行人工审核，请耐心等待工作人员处理</p>
 			</div>
 		</div>
 	</div>
@@ -198,7 +198,7 @@
 					position: absolute;
 					width: 4.6rem;
 					left: 1.5rem;
-					top: 0.15rem;
+					top: 0rem;
 					border: none;
 					text-align: right;
 				}
@@ -223,7 +223,7 @@
 							width: 4rem;
 							//margin-top: 0.2rem;
 							position: relative;
-							top: 0.1rem;
+							// top: 0.1rem;
 							font-size: 0.22rem;
 							color: #999999;
 							float: right;
@@ -260,6 +260,7 @@
 					background: #006b8d;
 					border-radius: 0.1rem;
 					color: white;
+					font-size: 0.2rem;
 				}
 			}
 			.prompt {

@@ -372,7 +372,7 @@
 							height: 1.3rem;
 							// border: 0.01rem solid red;
 						}
-						#qrcode4 {
+						/*#qrcode4 {
 							position: absolute;
 							z-index: 999;
 							left:0.2rem;
@@ -382,7 +382,7 @@
 							font-style: normal;
 							width: 0.5rem;
 							height: 1.3rem;
-						}
+						}*/
 					}
 					.choice {
 						position: absolute;
@@ -472,7 +472,7 @@
 							left: 0;
 							right: 0;
 							top: 0;
-							background: url("../../common/img/pic5.jpg") no-repeat;
+							background: url("../../common/img/activity/activity2/pic5.png") no-repeat;
 							background-size: 100% 3.33rem;
 							height: 3.4rem;
 						}
